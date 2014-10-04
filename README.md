@@ -1,4 +1,4 @@
-LazyPS
+LazyTS
 ======
 
 PowerShell GUI to manage Terminal Services
