@@ -9,23 +9,21 @@ function Get-ScriptDirectory
 { 
 	if($hostinvocation -ne $null)
 	{
-		Split-Path -path $hostinvocation.MyCommand.path
+		Split-Path $hostinvocation.MyCommand.path
 	}
 	else
 	{
-		Split-Path -path $script:MyInvocation.MyCommand.Path
+		Split-Path $script:MyInvocation.MyCommand.Path
 	}
 }
 
-[System.string]$ScriptDirectory = Get-ScriptDirectory
+[string]$ScriptDirectory = Get-ScriptDirectory
 
 
 # Load Configuration
 $configurationpath = Join-Path -Path $ScriptDirectory -ChildPath 'config.psd1'
 if(-not(Test-Path $configurationpath)){Write-Warning -message "can't retrieve the configuration file 'config.psd1'"}
 $Configuration= Import-LocalizedData -BaseDirectory (Get-ScriptDirectory) -FileName "config.psd1"
-if (-not($Configuration.settings.computer)){ $Configuration.settings.computer = $env:computername}
-
 
 # PSTerminalServices Module Requirements
 # Get the path of the DLL file: Cassia.dll (.net library)
