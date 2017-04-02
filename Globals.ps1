@@ -1,5 +1,5 @@
 ﻿#requires -version 3
-
+Write-Verbose -Message "[$ScriptName] Globals.ps1 processing..."
 #--------------------------------------------
 # Declare Global Variables and Functions here
 #--------------------------------------------

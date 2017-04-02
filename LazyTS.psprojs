@@ -4,9 +4,5 @@
   <OpenFolders>
     <Folder>functions</Folder>
   </OpenFolders>
-  <OpenFiles>
-    <File>Globals.ps1</File>
-    <File>config.psd1</File>
-    <File>MainForm.psf</File>
-  </OpenFiles>
+  <OpenFiles />
 </ProjectState>

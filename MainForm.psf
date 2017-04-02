@@ -1062,7 +1062,7 @@ RK5CYII=</Binary>
     <Property name="Name">contextmenustrip1</Property>
     <Property name="RenderMode">System</Property>
     <Property name="ShowImageMargin">False</Property>
-    <Property name="Size">233, 142</Property>
+    <Property name="Size">233, 164</Property>
     <Property name="Text">TSSession</Property>
   </Object>
   <Object type="System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="disconnectTSSessionToolStripMenuItem">
@@ -1105,7 +1105,7 @@ RK5CYII=</Binary>
     <Property name="Name">contextmenustripTSProcess</Property>
     <Property name="RenderMode">System</Property>
     <Property name="ShowImageMargin">False</Property>
-    <Property name="Size">233, 120</Property>
+    <Property name="Size">233, 142</Property>
   </Object>
   <Object type="System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="sendTSMessageToolStripMenuItem">
     <Property name="Name">sendTSMessageToolStripMenuItem</Property>
@@ -1205,15 +1205,17 @@ RK5CYII=</Binary>
     <Property name="Text">Contribute</Property>
     <Event name="Click">toolstripstatuslabel3_Click</Event>
   </Object>
-  <Code><![CDATA[$OnLoadFormEvent={
+  <Code><![CDATA[Write-Verbose -Message "[$ScriptName] MainForm processing..."
+
+$OnLoadFormEvent={
 	#Stuff to do when the Form is loading
+	Write-Verbose -Message "[$ScriptName] Loading Form..."
 	Set-DataGridView -DataGridView $datagridviewOutput -AlternativeRowColor -ForeColor 'black' -BackColor 'AliceBlue'
 }
 $buttonGetTsSession_Click={
 	TRY{
 		# Set the ContextMenuStrip for TsSession
 		$datagridviewOutput.ContextMenuStrip = $contextmenustripTSSession
-		
 		# Show the progression in the Richtextbox
 		Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSSession" -Message "Loading"
 		

@@ -1,6 +1,10 @@
 ﻿<File version="2.1">
-  <Code><![CDATA[#Define a Param block to use custom parameters in the project
+  <Code><![CDATA[[CmdletBinding()]
+PARAM()
+#Define a Param block to use custom parameters in the project
 #Param ($CustomParameter)
+$scriptname = (Get-Variable -Name MyInvocation -Scope 0 -ValueOnly).Mycommand
+Write-Verbose -Message "[$ScriptName] Startup..."
 
 function Main {
 	Param ([String]$Commandline)
