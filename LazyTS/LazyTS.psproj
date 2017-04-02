@@ -1,0 +1,37 @@
+﻿<Project>
+  <Version>2.0</Version>
+  <FileID>8c368515-c779-4ebb-95db-cf067966c8e3</FileID>
+  <ProjectType>0</ProjectType>
+  <Folders>
+    <Folder>functions</Folder>
+  </Folders>
+  <Files>
+    <File Build="0">Startup.pss</File>
+    <File Build="0" ReferenceFunction="Show-MainForm_psf">MainForm.psf</File>
+    <File Build="0" Shared="True" ReferenceFunction="Invoke-Globals_ps1">Globals.ps1</File>
+    <File Build="1">Cassia.dll</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Append-RichtextboxStatus_ps1">functions\Append-RichtextboxStatus.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Clear-DataGridViewSelection_ps1">functions\Clear-DataGridViewSelection.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-ConvertTo-DataTable_ps1">functions\ConvertTo-DataTable.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Disable-Button_ps1">functions\Disable-Button.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Disconnect-TSSession_ps1">functions\Disconnect-TSSession.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Enable-Button_ps1">functions\Enable-Button.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Find-DataGridViewValue_ps1">functions\Find-DataGridViewValue.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Get-TSCurrentSession_ps1">functions\Get-TSCurrentSession.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Get-TSGlobalServerName_ps1">functions\Get-TSGlobalServerName.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Get-TSProcess_ps1">functions\Get-TSProcess.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Get-TSServers_ps1">functions\Get-TSServers.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Get-TSSession_ps1">functions\Get-TSSession.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Load-DataGridView_ps1">functions\Load-DataGridView.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-New-MessageBox_ps1">functions\New-MessageBox.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Reset-DataGridViewFormat_ps1">functions\Reset-DataGridViewFormat.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Reset-TextBox_ps1">functions\Reset-TextBox.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Send-TSMessage_ps1">functions\Send-TSMessage.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Set-DataGridView_ps1">functions\Set-DataGridView.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Set-DataGridViewFilter_ps1">functions\Set-DataGridViewFilter.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Set-TextBox_ps1">functions\Set-TextBox.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Set-TSGlobalServerName_ps1">functions\Set-TSGlobalServerName.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Stop-TSProcess_ps1">functions\Stop-TSProcess.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Stop-TSSession_ps1">functions\Stop-TSSession.ps1</File>
+  </Files>
+</Project>
