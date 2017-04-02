@@ -58,11 +58,13 @@ This will Send a message to the selected session. If multiple sessions are selec
 
 
 Confirmation windows:
+
 ![Alt text](media/LazyTS-Sending_Message-Confirmation.png?raw=true "Sending Message(s)/confirmation")
 
 Default message: "IMPORTANT: The Server is going down for maintenance in 10 minutes. Please save your work and logoff."
 
 Message to send
+
 ![Alt text](media/LazyTS-Sending_Message-Custom.png?raw=true "Sending Message(s)/Message to send")
 
 
