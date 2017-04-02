@@ -97,14 +97,15 @@ If the Cassia.dll is not present, the script won't start:
 
 ## Installation
 
-Download the last version: https://github.com/lazywinadmin/LazyTS/releases
-Unblock the zip file
-Extract all the files
-Launch LazyTS.ps1
+* Download the last version: https://github.com/lazywinadmin/LazyTS/releases
+* Unblock the zip file
+* Extract all the files
+* Launch LazyTS.ps1
 
 
 ## Usage
 
-Launching the tool from the PS1 LazyTS.ps1
+* Launch a PowerShell console with the account that will perform the action
+* Execute the powershell script LazyTS.ps1
 
 ![Alt text](media/LazyTS.png "LazyTS")
