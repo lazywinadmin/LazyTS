@@ -33,6 +33,5 @@
     <File Build="0" Shared="False" ReferenceFunction="Invoke-Set-TSGlobalServerName_ps1">functions\Set-TSGlobalServerName.ps1</File>
     <File Build="0" Shared="False" ReferenceFunction="Invoke-Stop-TSProcess_ps1">functions\Stop-TSProcess.ps1</File>
     <File Build="0" Shared="False" ReferenceFunction="Invoke-Stop-TSSession_ps1">functions\Stop-TSSession.ps1</File>
-    <File Build="1">config.psd1</File>
   </Files>
 </Project>
