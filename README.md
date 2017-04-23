@@ -6,6 +6,34 @@ This tool is using the module PSTerminalService which relies on the Cassia .NET 
 
 ![alt text](http://2.bp.blogspot.com/-nx_UZoTQ3a8/VC4cumIZM3I/AAAAAAABoeM/xF4Z9M-dNgc/s1600/LazyTS.png "LazyTS")
 
+## Requirements
+* PowerShell 3.0
+* Cassia Library (included in the download)
+
+LazyTS is relying on the Cassia .NET Library (A DLL file). This file need to be present in the same directory as the script (Either when you use the PS1 or EXE file)
+
+Of course you also need the appropriate permission on the remote machine to be able to manage it.
+If the Cassia.dll is not present, the script won't start:
+
+![Alt text](media/Cassia.dll_required.png?raw=true "Cassia")
+
+## Installation
+
+* Download the last version: https://github.com/lazywinadmin/LazyTS/releases
+* Unblock the zip file
+* Extract all the files
+* Launch LazyTS.ps1
+
+
+## Usage
+
+* Launch a PowerShell console with the account that will perform the action
+* Execute the powershell script LazyTS.ps1
+
+![Alt text](media/LazyTS.png "LazyTS")
+
+
+
 ## Main features
 ### Querying session on local or remote machines
 After entering the ComputerName, click on the button Sessions
@@ -81,30 +109,3 @@ If the user deny the request, you'll get the following message
 
 ![Alt text](media/LazyTS-Shadow_Deny.png?raw=true "Deny")
 "The operator or administrator has refused the request"
-
-
-## Requirements
-* PowerShell 3.0
-* Cassia Library (included in the download)
-
-LazyTS is relying on the Cassia .NET Library (A DLL file). This file need to be present in the same directory as the script (Either when you use the PS1 or EXE file)
-
-Of course you also need the appropriate permission on the remote machine to be able to manage it.
-If the Cassia.dll is not present, the script won't start:
-
-![Alt text](media/Cassia.dll_required.png?raw=true "Cassia")
-
-## Installation
-
-* Download the last version: https://github.com/lazywinadmin/LazyTS/releases
-* Unblock the zip file
-* Extract all the files
-* Launch LazyTS.ps1
-
-
-## Usage
-
-* Launch a PowerShell console with the account that will perform the action
-* Execute the powershell script LazyTS.ps1
-
-![Alt text](media/LazyTS.png "LazyTS")
