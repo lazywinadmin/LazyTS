@@ -7,6 +7,7 @@ This tool is using the module PSTerminalService which relies on the Cassia .NET 
 ![alt text](http://2.bp.blogspot.com/-nx_UZoTQ3a8/VC4cumIZM3I/AAAAAAABoeM/xF4Z9M-dNgc/s1600/LazyTS.png "LazyTS")
 
 ## Requirements
+
 * PowerShell 3.0
 * Cassia Library (included in the download)
 
@@ -33,15 +34,17 @@ If the Cassia.dll is not present, the script won't start:
 ![Alt text](media/LazyTS.png "LazyTS")
 
 
-
 ## Main features
+
 ### Querying session on local or remote machines
+
 After entering the ComputerName, click on the button Sessions
 
 ![Alt text](media/LazyTS_Query_sessions.png?raw=true "Querying session on local or remote machines")
 
 
 ### Disconnecting Session(s)
+
 Select one session or multiple sessions and right click, click on Disconnect Session
 This will only disconnect the user, its session State will become "disconnected", but will remain opened on the host.
 
@@ -54,6 +57,7 @@ When getting disconnected, the user will get the following window
 Your network administrator might have ended the connection. Try connection again, or contact technical support for assistance</i>
 
 ### Stopping a Session(s)
+
 Select one session or multiple sessions and right click, click on Stop Session
 This will close the session of the user without warning. Any current work in progress will be lost.
 
@@ -63,11 +67,13 @@ Here is the confirmation window after you select "Stop Session"
 ![Alt text](media/LazyTS_Closing_sessions_Confirmation.png?raw=true "confirmation window for Stopping a Session")
 
 ### Querying Processes
+
 After entering the ComputerName, click on the button Process.
 This will list all the running processes (for all sessions)
 ![Alt text](media/LazyTS_Query_processes.png?raw=true "Querying Processes")
 
 ### Stopping Process(es)
+
 Select one process or multiple processes and right click, click on Stop Process
 This will Stop the process(es) selected.
 
@@ -76,6 +82,7 @@ This will Stop the process(es) selected.
 ![Alt text](media/LazyTS-Stopping_Processes_Confirmation.png?raw=true "Stopping Process(es)/Confirmation")
 
 ### Sending Message(s)
+
 After entering the ComputerName, click on the button Message.
 Note that you must select one session or one process in order to use this option (the script need to know which session(s) it should send the message to.
 
@@ -96,9 +103,11 @@ Message to send
 
 
 #### Example of message received by each session selected
+
 ![Alt text](media/User_message.png?raw=true "Example")
 
 ### Remote Desktop: Shadow (since v1.1)
+
 When right clicking on a row you'll have the possibility to open a Shadow RDP on a selected Session ID. After you request to View or Control the session, the user will get this message
 
 ![Alt text](media/LazyTS-Shadow_Control.png?raw=true "Remote Desktop: Shadow")
