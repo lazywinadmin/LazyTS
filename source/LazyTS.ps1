@@ -3852,7 +3852,7 @@ function Invoke-ConvertTo-DataTable_ps1
             [switch]$FilterWMIProperties
         )
 
-        if ($Table -eq $null)
+        if ($null -eq $Table)
         {
             $Table = New-Object System.Data.DataTable
         }
