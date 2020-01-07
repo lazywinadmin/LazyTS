@@ -1490,7 +1490,7 @@ RK5CYII=')
     #Location of the script
     function Get-ScriptDirectory
     {
-        if($hostinvocation -ne $null)
+        if($null -ne $hostinvocation)
         {
             Split-Path -path $hostinvocation.MyCommand.path
         }
@@ -3868,21 +3868,21 @@ function Invoke-ConvertTo-DataTable_ps1
                 #Clear out the Table Contents
                 $Table.Clear()
 
-                if ($InputObject -eq $null) { return } #Empty Data
+                if ($null -eq $InputObject) { return } #Empty Data
 
                 $object = $null
 
                 #find the first non null value
                 foreach ($item in $InputObject)
                 {
-                    if ($item -ne $null)
+                    if ($null -ne $item)
                     {
                         $object = $item
                         break
                     }
                 }
 
-                if ($object -eq $null) { return } #All null then empty
+                if ($null -eq $object) { return } #All null then empty
 
                 #COLUMN
                 #Get all the properties in order to create the columns
@@ -3893,13 +3893,13 @@ function Invoke-ConvertTo-DataTable_ps1
                         #Get the type from the Definition string
                         $type = $null
 
-                        if ($prop.Value -ne $null)
+                        if ($null -ne $prop.Value)
                         {
                             try { $type = $prop.Value.GetType() }
                             catch { Write-Verbose -Message "Can't find type of $prop" }
                         }
 
-                        if ($type -ne $null) # -and [System.Type]::GetTypeCode($type) -ne 'Object')
+                        if ($null -ne $type) # -and [System.Type]::GetTypeCode($type) -ne 'Object')
                         {
                             Write-Verbose -Message "Creating Column: $($Prop.name) (Type: $type)"
                             [void]$table.Columns.Add($prop.Name, $type)
@@ -3939,7 +3939,7 @@ function Invoke-ConvertTo-DataTable_ps1
                         #Find the appropriate column to put the value
                         if ($table.Columns.Contains($prop.Name))
                         {
-                            if ($prop.value -eq $null) { $prop.value = [DBNull]::Value }
+                            if ($null -eq $prop.value) { $prop.value = [DBNull]::Value }
                             $row.Item($prop.Name) = $prop.Value
                         }
                     }
@@ -4147,7 +4147,7 @@ function Invoke-Disconnect-TSSession_ps1
                 }
 
 
-                if ($session -ne $null)
+                if ($null -ne $session)
                 {
                     if ($Force -or $PSCmdlet.ShouldProcess($TSRemoteServer.ServerName, "Disconnecting session id '$($session.sessionId)'"))
                     {
@@ -6003,7 +6003,7 @@ function Invoke-Stop-TSSession_ps1
                     $session = $InputObject
                 }
 
-                if ($session -ne $null)
+                if ($null -ne $session)
                 {
                     if ($Force -or $PSCmdlet.ShouldProcess($TSRemoteServer.ServerName, "Logging off session id '$($session.sessionId)'"))
                     {
