@@ -60,7 +60,7 @@ function Main {
 	Param ([String]$Commandline)
 	if((Show-MainForm_psf) -eq "OK")
 	{	}
-	
+
 	$global:ExitCode = 0 #Set the exit code for the Packager
 }
 #endregion Source: Startup.pss
@@ -337,7 +337,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 	# User Generated Script
 	#----------------------------------------------
 	Write-Verbose -Message "[$ScriptName] MainForm processing..."
-	
+
 	$OnLoadFormEvent={
 		#Stuff to do when the Form is loading
 		Write-Verbose -Message "[$ScriptName] Loading Form..."
@@ -349,7 +349,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			$datagridviewOutput.ContextMenuStrip = $contextmenustripTSSession
 			# Show the progression in the Richtextbox
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSSession" -Message "Loading"
-			
+
 			# Get the Data from Get-TSSession and convert to datatable
 			$output = Get-TSSession -ComputerName $textboxComputerName.Text -ErrorAction 'Stop' -ErrorVariable ErrorGetTSSession | ForEach-Object {
 				[pscustomobject][ordered]@{
@@ -374,7 +374,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					LoginTime = $_.LoginTime
 					}#pscustomobject properties
 			} #FOREACH
-			
+
 			$global:outputDT = ConvertTo-DataTable -InputObject $output
 			Load-DataGridView -DataGridView $datagridviewOutput -Item $outputDT -ErrorAction 'Stop' -ErrorVariable ErrorLoadDGW
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSSession" -Message "Loaded"
@@ -387,15 +387,15 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			ELSE { Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Unknown Error" -Message "Last Error: $($Error[0].Exception.Message) " -MessageColor 'Red' }
 		}#CATCH
 	}
-	
+
 	$buttonProcess_Click={
 		TRY{
 			# Set the ContextMenuStrip for TsProcess
 			$datagridviewOutput.ContextMenuStrip = $contextmenustripTSProcess
-			
+
 			# Show the progression in the Richtextbox
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSProcess" -Message "Loading"
-			
+
 			# Get the TSProcess and output a PSObject
 			$output = Get-TSProcess -ComputerName $textboxComputerName.Text | ForEach-Object {
 				[pscustomobject][ordered]@{
@@ -408,7 +408,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					UnderlyingProcess = $_.UnderlyingProcess
 				}#pscustomobject properties
 			}#FOREACH-OBJECT
-			
+
 			$global:outputDT = ConvertTo-DataTable -InputObject $output
 			Load-DataGridView -DataGridView $datagridviewOutput -Item $outputDT
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSProcess" -Message "Loaded"
@@ -418,7 +418,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSProcess" -Message "Loading Error" -MessageColor 'Red'
 		}
 	}
-	
+
 	$sendTSSessionToolStripMenuItem_Click={
 		TRY{
 			# ONE ROW SELECTED
@@ -429,16 +429,16 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 				IF ($Message)
 				{
 					$Message = "$Message - Sent by $env:userdomain\$env:username"
-					
+
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "Sending Message to session $($datagridviewOutput.currentrow.Cells[1].value) on $($textboxComputerName.text)"
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "MESSAGE: $message"
-					
+
 					# Sending the message
 					Send-TSMessage -ComputerName $textboxComputerName.Text -Text $message -Id $datagridviewOutput.currentrow.Cells[1].value -caption "Administrator Message" -ErrorAction 'Stop'
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "Message Sent!"
 				}
 			}#IF($datagridviewOutput.SelectedRows.Count -eq 1)
-			
+
 			# MULTIPLE ROWS SELECTED
 			IF ($datagridviewOutput.SelectedRows.Count -gt 1)
 			{
@@ -449,7 +449,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					# Store the session ID in $values
 					$values += $SelectedRow.Cells[1].Value
 				}#FOREACH
-				
+
 				IF([System.Windows.Forms.MessageBox]::Show("You selected multiple sessions ($(($values|select-object -unique).count)), do you want to continue ?", "Question",[System.Windows.Forms.MessageBoxButtons]::YesNo) -eq "Yes")
 				{
 					# Input Message box to send
@@ -460,7 +460,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 						$Message = "$Message - Sent by $env:userdomain\$env:username"
 						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "MESSAGE: $message"
 						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "Sessions to receive the Message: $(($values|Select-Object -Unique).Count) sessions"
-						
+
 						# Send Message to each session
 						# if the same session was selected twice, only one command will be sent
 						FOREACH ($item in ($values | Select-Object -Unique))
@@ -482,7 +482,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "Last Error ($error[0])" -MessageColor 'Red'
 		}
 	}
-	
+
 	$disconnectTSSessionToolStripMenuItem_Click={
 		TRY{
 			# ONE ROW SELECTED
@@ -494,7 +494,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Disconnect-TSSession" -Message "Session $($datagridviewOutput.currentrow.Cells[1].value) on $($textboxComputerName.text) Disconnected!"
 				}# Message Box
 			}# IF($datagridviewOutput.SelectedRows.Count -eq 1)
-			
+
 			# MULTIPLE ROWS SELECTED
 			IF ($datagridviewOutput.SelectedRows.Count -gt 1)
 			{
@@ -505,14 +505,14 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					# Store the session ID in $values
 					$values += $SelectedRow.Cells[1].Value
 				}#FOREACH
-				
+
 				#SingleValues
 				$Singlevalues = $values | Select-Object -Unique
-				
+
 				IF([System.Windows.Forms.MessageBox]::Show("You selected multiple sessions ($($Singlevalues.count)) to disconnect, do you want to continue ?", "Question",[System.Windows.Forms.MessageBoxButtons]::YesNo) -eq 'Yes')
 				{
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Disconnect-TSSession" -Message "Sessions to Disconnect: $(($values | Select-Object -Unique).count)"
-					
+
 					# Disconnect each sessions selected
 					# if the same session was selected twice, only one command will be sent
 					FOREACH ($item in ($values | Select-Object -Unique)){
@@ -531,7 +531,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Disconnect-TSSession" -Message "Last Error ($error[0])" -MessageColor 'Red'
 		}#CATCH
 	}
-	
+
 	$stopTSProcessToolStripMenuItem_Click={
 		TRY{
 			# ONE ROW SELECTED
@@ -542,19 +542,19 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					Stop-TSProcess -ComputerName $textboxComputerName.Text -Id $($datagridviewOutput.currentrow.Cells[3].value) -Force
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSProcess" -Message "Stopped - Process $($datagridviewOutput.currentrow.Cells[2].value) ID $($datagridviewOutput.currentrow.Cells[3].value) on $($textboxComputerName.text)"
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSProcess" -Message "Reloading Process List..."
-					
+
 					# Refresh the list of process
 					$buttonProcess_Click.invoke()
 				}# Message box "Do you want to stop the Process"
 			}#IF($datagridviewOutput.SelectedRows.Count -eq 1)
-			
+
 			# MULTIPLE ROWS SELECTED
 			IF ($datagridviewOutput.SelectedRows.Count -gt 1)
 			{
 				IF([System.Windows.Forms.MessageBox]::Show("You selected multiple Processes ($($datagridviewOutput.SelectedRows.Count)) to Stop, do you want to continue ?", "Question",[System.Windows.Forms.MessageBoxButtons]::YesNo) -eq "Yes")
 				{
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSProcess" -Message "Processes to Stop: $($datagridviewOutput.SelectedRows.Count)"
-					
+
 					# Get the Values for the Rows Selected and kill each process
 					FOREACH ($SelectedRow in $datagridviewOutput.SelectedRows) {
 						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSProcess" -Message "Stopping - Process $($SelectedRow.Cells[2].Value) ID $($SelectedRow.Cells[3].Value) on $($textboxComputerName.text)"
@@ -562,7 +562,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSProcess" -Message "Stopped - Process $($SelectedRow.Cells[2].Value) ID $($SelectedRow.Cells[3].Value)  on $($textboxComputerName.text)"
 					}#FOREACH
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSProcess" -Message "Done. Reloading Process List..."
-					
+
 					# Refresh the list of process
 					$buttonProcess_Click.invoke()
 				}#IF Message Box "You selected multiple rows"
@@ -573,36 +573,36 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSProcess" -Message "Stopping Process $($datagridviewOutput.currentrow.Cells[2].value) ID $($datagridviewOutput.currentrow.Cells[3].value) on $($textboxComputerName.text) Failed!" -MessageColor 'red'
 		}#CATCH
 	}
-	
+
 	$buttonExit_Click = {
 		# Close the GUI
 		$MainForm.Close()
 	}
-	
+
 	$datagridviewOutput_ColumnHeaderMouseClick=[System.Windows.Forms.DataGridViewCellMouseEventHandler]{
 		IF($datagridviewOutput.DataSource -is [System.Data.DataTable])
 		{
 			#$column = $datagridviewOutput.Columns[$_.Columns]
 			$column = $datagridviewOutput.Columns[$_.ColumnIndex]
 			$direction = [System.ComponentModel.ListSortDirection]::Ascending
-			
+
 			IF($column.HeaderCell.SortGlyphDirection -eq 'Descending'){
 				$direction = [System.ComponentModel.ListSortDirection]::Descending
 			}#IF($column.HeaderCell.SortGlyphDirection -eq 'Descending')
 			$datagridviewOutput.Sort($datagridviewOutput.Columns[$_.ColumnIndex], $direction)
-			
+
 		}#IF($datagridviewOutput.DataSource -is [System.Data.DataTable])
 	}
-	
+
 	$toolstripstatuslabel1_Click = {
 		# Open LazyWinAdmin Blog
 		Start-Process -FilePath $($Configuration.author.website.uri)
 	}
-	
+
 	$buttonMessage_Click={
 		$sendTSSessionToolStripMenuItem_Click.Invoke()
 	}
-	
+
 	$stopTSSessionToolStripMenuItem_Click={
 		TRY
 		{
@@ -616,7 +616,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSSession" -Message "Session $($datagridviewOutput.currentrow.Cells[1].value) on $($textboxComputerName.text) Closed!"
 				}# Message Box
 			}# IF($datagridviewOutput.SelectedRows.Count -eq 1)
-			
+
 			# MULTIPLE ROWS SELECTED
 			IF ($datagridviewOutput.SelectedRows.Count -gt 1)
 			{
@@ -627,13 +627,13 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					# Store the session ID in $values
 					$values += $SelectedRow.Cells[1].Value
 				}#FOREACH
-				
+
 				$SingleValues = $values | Select-Object -Unique
-				
+
 				IF ([System.Windows.Forms.MessageBox]::Show("You selected multiple sessions ($($SingleValues.count)) to Close, do you want to continue ?", "Question", [System.Windows.Forms.MessageBoxButtons]::YesNo) -eq 'Yes')
 				{
 					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSSession" -Message "Sessions to Close: $(($values | Select-Object -Unique).count)"
-					
+
 					# Disconnect each sessions selected
 					# if the same session was selected twice, only one command will be sent
 					FOREACH ($item in ($values | Select-Object -Unique))
@@ -645,7 +645,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 					}#FOREACH
 				}#IF Message Box "You selected multiple rows"
 			}#IF($datagridviewOutput.SelectedRows.Count -gt 1)
-			
+
 			# Refresh the list of Session(s)
 			$buttonGetTsSession_Click.invoke()
 		}#TRY
@@ -657,15 +657,15 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSSession" -Message "Last Error ($error[0])" -MessageColor 'Red'
 		}#CATCH
 	}
-	
+
 	$remoteDesktopToolStripMenuItem_Click={
 		Start-Process -FilePath 'mstsc' -ArgumentList "/v:$($textboxComputerName.Text):3389 /admin"
 	}
-	
+
 	$powerShellRemotingToolStripMenuItem_Click={
 		Start-Process powershell.exe -ArgumentList "-noexit -command Enter-PSSession -ComputerName $($textboxComputerName.Text)"
 	}
-	
+
 	$buttonHighlight_Click = {
 		if ($textboxHighlight.Text)
 		{
@@ -675,16 +675,16 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Find-DataGridViewValue -DataGridView $datagridviewOutput -RowBackColor 'Yellow' -Value $textboxHighlight.Text
 		}
 	}
-	
+
 	$buttonReset_Click={
 		Reset-DataGridViewFormat -DataGridView $datagridviewOutput
 		Reset-TextBox -TextBox $textboxHighlight
 	}
-	
+
 	$buttonFilter_Click={
 		Set-DataGridViewFilter -DataGridView $datagridviewOutput -AllColumns -DataTable $outputDT -Filter $textboxHighlight.Text
 	}
-	
+
 	$remoteDesktopShadowIDToolStripMenuItem_Click = {
 		TRY
 		{
@@ -757,12 +757,12 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Error while opening session" -MessageColor 'red'
 		}
 	}
-	
-	
+
+
 	foreach ($i in $datagridviewOutput.Columns)
 	{
 		$i.GetType
-		
+
 	}
 	$textboxHighlight_TextChanged = {
 		if ($textboxHighlight.Text -ne "")
@@ -776,7 +776,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 			Set-TextBox -TextBox $textboxHighlight -BackColor 'White'
 		}
 	}
-	
+
 	$toolstripstatuslabel3_Click={
 		Start-Process $($Configuration.ProjectURI)
 	}
@@ -784,13 +784,13 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 	#----------------------------------------------
 	#region Generated Events
 	#----------------------------------------------
-	
+
 	$Form_StateCorrection_Load=
 	{
 		#Correct the initial state of the form to prevent the .Net maximized form issue
 		$MainForm.WindowState = $InitialFormWindowState
 	}
-	
+
 	$Form_StoreValues_Closing=
 	{
 		#Store the control values
@@ -800,7 +800,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 		$script:MainForm_richtextboxStatus = $richtextboxStatus.Text
 	}
 
-	
+
 	$Form_Cleanup_FormClosed=
 	{
 		#Remove all event handlers from the controls
@@ -1486,10 +1486,10 @@ RK5CYII=')
 	#--------------------------------------------
 	# Declare Global Variables and Functions here
 	#--------------------------------------------
-	
+
 	#Location of the script
 	function Get-ScriptDirectory
-	{ 
+	{
 		if($hostinvocation -ne $null)
 		{
 			Split-Path -path $hostinvocation.MyCommand.path
@@ -1499,24 +1499,24 @@ RK5CYII=')
 			Split-Path -path $script:MyInvocation.MyCommand.Path
 		}
 	}
-	
+
 	[System.string]$ScriptDirectory = Get-ScriptDirectory
-	
-	
+
+
 	# Load Configuration
 	$configurationpath = Join-Path -Path $ScriptDirectory -ChildPath 'config.psd1'
 	if(-not(Test-Path $configurationpath)){Write-Warning -message "can't retrieve the configuration file 'config.psd1'"}
 	$Configuration= Import-LocalizedData -BaseDirectory (Get-ScriptDirectory) -FileName "config.psd1"
 	if (-not($Configuration.settings.computer)){ $Configuration.settings.computer = $env:computername}
-	
-	
+
+
 	# PSTerminalServices Module Requirements
 	# Get the path of the DLL file: Cassia.dll (.net library)
 	$CassiaPath = Join-Path -Path (Get-ScriptDirectory) -ChildPath "Cassia.dll"
 	# Load the DLL
 	if (-not(Test-Path $CassiaPath)){Write-Warning -Message "The file Cassia.dll is missing. The Script can't continue without this file";exit}
 	[Reflection.Assembly]::LoadFile($CassiaPath) | Out-Null
-	
+
 	# Import all the helper functions
 	$functionpath = Join-Path -Path $ScriptDirectory -child "functions"
 	$script:Server = 'localhost'
@@ -1524,9 +1524,9 @@ RK5CYII=')
 	{
 		. $file.fullname
 	}
-	
-	
-	
+
+
+
 	#
 	## From WinFormPS
 	#function Append-RichtextboxStatus{
@@ -1539,26 +1539,26 @@ RK5CYII=')
 	#	[string]$SourceColor="Gray",
 	#	[string]$ComputerName,
 	#	[String]$ComputerNameColor= "Blue")
-	#	
+	#
 	#	$SortableTime = get-date -Format "yyyy-MM-dd HH:mm:ss"
 	#	$richtextboxStatus.SelectionColor = $DateTimeColor
 	#	$richtextboxStatus.AppendText("[$SortableTime] ")
-	#	
+	#
 	#	IF ($PSBoundParameters['ComputerName']){
 	#		$richtextboxStatus.SelectionColor = $ComputerNameColor
 	#		$richtextboxStatus.AppendText(("$ComputerName ").ToUpper())
 	#	}
-	#	
+	#
 	#	IF ($PSBoundParameters['Source']){
 	#		$richtextboxStatus.SelectionColor = $SourceColor
 	#		$richtextboxStatus.AppendText("$Source ")
 	#	}
-	#	
+	#
 	#	$richtextboxStatus.SelectionColor = $MessageColor
 	#	$richtextboxStatus.AppendText("$Message`r")
 	#	$richtextboxStatus.Refresh()
 	#	$richtextboxStatus.ScrollToCaret()
-	#	
+	#
 	#	Write-Verbose -Message "$SortableTime $Message"
 	#}
 	#
@@ -1567,57 +1567,57 @@ RK5CYII=')
 	#	<#
 	#		.SYNOPSIS
 	#			This function helps you edit the datagridview control
-	#	
+	#
 	#		.DESCRIPTION
 	#			This function helps you edit the datagridview control
-	#	
+	#
 	#		.EXAMPLE
 	#			Set-DataGridView -DataGridView $datagridview1 -ProperFormat -FontFamily $listboxFontFamily.Text -FontSize $listboxFontSize.Text
-	#	
+	#
 	#		.EXAMPLE
 	#			Set-DataGridView -DataGridView $datagridview1 -AlternativeRowColor -BackColor 'AliceBlue' -ForeColor 'Black'
-	#	
+	#
 	#		.EXAMPLE
 	#			Set-DataGridViewRowHeader -DataGridView $datagridview1 -HideRowHeader
-	#	
+	#
 	#		.EXAMPLE
 	#			Set-DataGridViewRowHeader -DataGridView $datagridview1 -ShowRowHeader
-	#	
+	#
 	#		.NOTES
 	#			Author: Francois-Xavier Cat
 	#			Twitter:@LazyWinAdm
 	#			WWW: 	lazywinadmin.com
 	#	#>
-	#	
+	#
 	#	[CmdletBinding()]
 	#	PARAM (
 	#		[ValidateNotNull()]
 	#		[Parameter(Mandatory = $true)]
 	#		[System.Windows.Forms.DataGridView]$DataGridView,
-	#		
+	#
 	#		[Parameter(Mandatory = $true, ParameterSetName = "AlternativeRowColor")]
 	#		[Switch]$AlternativeRowColor,
-	#		
+	#
 	#		[Parameter(ParameterSetName = "DefaultRowColor")]
 	#		[Switch]$DefaultRowColor,
-	#		
+	#
 	#		[Parameter(Mandatory = $true, ParameterSetName = "AlternativeRowColor")]
 	#		[Parameter(ParameterSetName = "DefaultRowColor")]
 	#		[System.Drawing.Color]$ForeColor,
-	#		
+	#
 	#		[Parameter(Mandatory = $true, ParameterSetName = "AlternativeRowColor")]
 	#		[Parameter(ParameterSetName = "DefaultRowColor")]
 	#		[System.Drawing.Color]$BackColor,
-	#		
+	#
 	#		[Parameter(Mandatory = $true, ParameterSetName = "Proper")]
 	#		[Switch]$ProperFormat,
-	#		
+	#
 	#		[Parameter(ParameterSetName = "Proper")]
 	#		[String]$FontFamily = "Consolas",
-	#		
+	#
 	#		[Parameter(ParameterSetName = "Proper")]
 	#		[Int]$FontSize = 10,
-	#		
+	#
 	#		[Parameter(ParameterSetName = "HideRowHeader")]
 	#		[Switch]$HideRowHeader,
 	#		[Parameter(ParameterSetName = "ShowRowHeader")]
@@ -1630,28 +1630,28 @@ RK5CYII=')
 	#			$DataGridView.AlternatingRowsDefaultCellStyle.ForeColor = $ForeColor
 	#			$DataGridView.AlternatingRowsDefaultCellStyle.BackColor = $BackColor
 	#		}
-	#		
+	#
 	#		if ($psboundparameters['DefaultRowColor'])
 	#		{
 	#			$DataGridView.RowsDefaultCellStyle.ForeColor = $ForeColor
 	#			$DataGridView.RowsDefaultCellStyle.BackColor = $BackColor
 	#		}
-	#		
-	#		
+	#
+	#
 	#		if ($psboundparameters['ProperFormat'])
 	#		{
 	#			#$Font = New-Object -TypeName System.Drawing.Font -ArgumentList "Segoi UI", 10
 	#			$Font = New-Object -TypeName System.Drawing.Font -ArgumentList $FontFamily, $FontSize
-	#			
+	#
 	#			#[System.Drawing.FontStyle]::Bold
-	#			
+	#
 	#			$DataGridView.ColumnHeadersBorderStyle = 'Raised'
 	#			$DataGridView.BorderStyle = 'Fixed3D'
 	#			$DataGridView.SelectionMode = 'FullRowSelect'
 	#			$DataGridView.AllowUserToResizeRows = $false
 	#			$datagridview.DefaultCellStyle.font = $Font
 	#		}
-	#		
+	#
 	#		if ($psboundparameters['HideRowHeader'])
 	#		{
 	#			$DataGridView.RowHeadersVisible = $false
@@ -1661,7 +1661,7 @@ RK5CYII=')
 	#			$DataGridView.RowHeadersVisible = $true
 	#		}
 	#	}
-	#	
+	#
 	#}#Set-DataGridView
 	#
 	#function Reset-DataGridViewFormat
@@ -1669,16 +1669,16 @@ RK5CYII=')
 	#<#
 	#	.SYNOPSIS
 	#		The Reset-DataGridViewFormat function will reset the format of a datagridview control
-	#	
+	#
 	#	.DESCRIPTION
 	#		The Reset-DataGridViewFormat function will reset the format of a datagridview control
-	#	
+	#
 	#	.PARAMETER DataGridView
 	#		Specifies the DataGridView Control.
-	#	
+	#
 	#	.EXAMPLE
 	#		PS C:\> Reset-DataGridViewFormat -DataGridView $DataGridViewObj
-	#	
+	#
 	#	.NOTES
 	#		Author: Francois-Xavier Cat
 	#		Twitter:@LazyWinAdm
@@ -1693,7 +1693,7 @@ RK5CYII=')
 	#		$DataSource = $DataGridView.DataSource
 	#		$DataGridView.DataSource = $null
 	#		$DataGridView.DataSource = $DataSource
-	#		
+	#
 	#		#$DataGridView.RowsDefaultCellStyle.BackColor = 'White'
 	#		#$DataGridView.RowsDefaultCellStyle.ForeColor = 'Black'
 	#		$DataGridView.RowsDefaultCellStyle = $null
@@ -1706,42 +1706,42 @@ RK5CYII=')
 	#<#
 	#	.SYNOPSIS
 	#		The Find-DataGridViewValue function helps you to find a specific value and select the cell, row or to set a fore and back color.
-	#	
+	#
 	#	.DESCRIPTION
 	#		The Find-DataGridViewValue function helps you to find a specific value and select the cell, row or to set a fore and back color.
-	#	
+	#
 	#	.PARAMETER DataGridView
 	#		Specifies the DataGridView Control to use
-	#	
+	#
 	#	.PARAMETER RowBackColor
 	#		Specifies the back color of the row to use
-	#	
+	#
 	#	.PARAMETER RowForeColor
 	#		Specifies the fore color of the row to use
-	#	
+	#
 	#	.PARAMETER SelectCell
 	#		Specifies to select only the cell when the value is found
-	#	
+	#
 	#	.PARAMETER SelectRow
 	#		Specifies to select the entire row when the value is found
-	#	
+	#
 	#	.PARAMETER Value
 	#		Specifies the value to search
-	#	
+	#
 	#	.EXAMPLE
 	#		PS C:\> Find-DataGridViewValue -DataGridView $datagridview1 -Value $textbox1.Text
-	#	
+	#
 	#		This will find the value and select the cell(s)
-	#	
+	#
 	#	.EXAMPLE
 	#		PS C:\> Find-DataGridViewValue -DataGridView $datagridview1 -Value $textbox1.Text -RowForeColor 'Red' -RowBackColor 'Black'
-	#	
+	#
 	#		This will find the value and color the fore and back of the row
 	#	.EXAMPLE
 	#		PS C:\> Find-DataGridViewValue -DataGridView $datagridview1 -Value $textbox1.Text -SelectRow
-	#	
+	#
 	#		This will find the value and select the entire row
-	#	
+	#
 	#	.NOTES
 	#		Francois-Xavier Cat
 	#		@lazywinadm
@@ -1751,16 +1751,16 @@ RK5CYII=')
 	#	PARAM (
 	#		[Parameter(Mandatory = $true)]
 	#		[System.Windows.Forms.DataGridView]$DataGridView,
-	#		
-	#	[ValidateNotNull()]	
+	#
+	#	[ValidateNotNull()]
 	#	[Parameter(Mandatory = $true)]
 	#		[String]$Value,
 	#		[Parameter(ParameterSetName = "Cell")]
 	#		[Switch]$SelectCell,
-	#		
+	#
 	#		[Parameter(ParameterSetName = "Row")]
 	#		[Switch]$SelectRow,
-	#		
+	#
 	#		#[Parameter(ParameterSetName = "Column")]
 	#		#[Switch]$SelectColumn,
 	#		[Parameter(ParameterSetName = "RowColor")]
@@ -1768,27 +1768,27 @@ RK5CYII=')
 	#		[Parameter(ParameterSetName = "RowColor")]
 	#		[system.Drawing.Color]$RowBackColor
 	#	)
-	#	
+	#
 	#	PROCESS
 	#	{
 	#		$DataGridView.ClearSelection()
-	#		
+	#
 	#		FOR ([int]$i = 0; $i -lt $DataGridView.RowCount; $i++)
 	#		{
 	#			FOR ([int] $j = 0; $j -lt $DataGridView.ColumnCount; $j++)
 	#			{
 	#				$CurrentCell = $dataGridView.Rows[$i].Cells[$j]
-	#				
+	#
 	#				#if ((-not $CurrentCell.Value.Equals([DBNull]::Value)) -and ($CurrentCell.Value.ToString() -like "*$Value*"))
 	#				if ($CurrentCell.Value.ToString() -match $Value)
 	#				{
-	#					
+	#
 	#					# Row Selection
 	#					IF ($PSBoundParameters['SelectRow'])
 	#					{
 	#						$dataGridView.Rows[$i].Selected = $true
 	#					}
-	#					
+	#
 	#					<#
 	#					# Column Selection
 	#					IF ($PSBoundParameters['SelectColumn'])
@@ -1798,7 +1798,7 @@ RK5CYII=')
 	#						#$CurrentCell.DataGridView.Columns[$j].Selected = $true
 	#					}
 	#					#>
-	#					
+	#
 	#					# Row Fore Color
 	#					IF ($PSBoundParameters['RowForeColor'])
 	#					{
@@ -1809,7 +1809,7 @@ RK5CYII=')
 	#					{
 	#						$dataGridView.Rows[$i].DefaultCellStyle.BackColor = $RowBackColor
 	#					}
-	#					
+	#
 	#					# Cell Selection
 	#					ELSEIF (-not ($PSBoundParameters['SelectRow']) -and -not ($PSBoundParameters['SelectColumn']))
 	#					{
@@ -1826,30 +1826,30 @@ RK5CYII=')
 	#<#
 	#	.SYNOPSIS
 	#		The function Set-DataGridViewFilter helps to only show specific entries with a specific value
-	#	
+	#
 	#	.DESCRIPTION
 	#		The function Set-DataGridViewFilter helps to only show specific entries with a specific value.
 	#		The data needs to be in a DataTable Object. You can use ConvertTo-DataTable to convert your
 	#		PowerShell object into a DataTable object.
-	#	
+	#
 	#	.PARAMETER AllColumns
 	#		Specifies to search all the column
-	#	
+	#
 	#	.PARAMETER ColumnName
 	#		Specifies to search in a specific column name
-	#	
+	#
 	#	.PARAMETER DataGridView
 	#		Specifies the DataGridView control where the data will be filtered
-	#	
+	#
 	#	.PARAMETER DataTable
 	#		Specifies the DataTable object that is most likely the original source of the DataGridView
-	#	
+	#
 	#	.PARAMETER Filter
 	#		Specifies the string to search
-	#	
+	#
 	#	.EXAMPLE
 	#		PS C:\> Set-DataGridViewFilter -DataGridView $datagridview1 -DataTable $ProcessesDT -AllColumns -Filter $textbox1.Text
-	#	
+	#
 	#	.EXAMPLE
 	#		PS C:\> Set-DataGridViewFilter -DataGridView $datagridview1 -DataTable $ProcessesDT -ColumnName "Name" -Filter $textbox1.Text
 	#
@@ -1865,7 +1865,7 @@ RK5CYII=')
 	#		[System.Data.DataTable]$DataTable,
 	#		[Parameter(Mandatory = $true)]
 	#		[String]$Filter,
-	#		
+	#
 	#		[Parameter(Mandatory = $true, ParameterSetName = "OneColumn")]
 	#		[String]$ColumnName,
 	#		[Parameter(Mandatory = $true, ParameterSetName = "AllColumns")]
@@ -1874,7 +1874,7 @@ RK5CYII=')
 	#	PROCESS
 	#	{
 	#		$Filter = $Filter.ToString()
-	#		
+	#
 	#		IF ($PSBoundParameters['AllColumns'])
 	#		{
 	#			FOREACH ($Column in $DataTable.Columns)
@@ -1882,17 +1882,17 @@ RK5CYII=')
 	#				#$RowFilter += "Convert("+$($Column.ColumnName)+",'system.string') Like '%"{1}%' OR " -f $Column.ColumnName, $Filter
 	#				$RowFilter += "Convert($($Column.ColumnName),'system.string') Like '%$Filter%' OR "
 	#			}
-	#			
+	#
 	#			# Remove the last 'OR'
 	#			$RowFilter = $RowFilter -replace " OR $", ''
-	#			
+	#
 	#			#Append-RichtextboxStatus -Message $RowFilter
 	#		}
 	#		IF ($PSBoundParameters['ColumnName'])
 	#		{
 	#			$RowFilter = "$ColumnName LIKE '%$Filter%'"
 	#		}
-	#		
+	#
 	#		$DataTable.defaultview.rowfilter = $RowFilter
 	#		Load-DataGridView -DataGridView $DataGridView -Item $DataTable
 	#	}
@@ -1904,34 +1904,34 @@ RK5CYII=')
 	#	<#
 	#		.SYNOPSIS
 	#			Converts objects into a DataTable.
-	#	
+	#
 	#		.DESCRIPTION
 	#			Converts objects into a DataTable, which are used for DataBinding.
-	#	
+	#
 	#		.PARAMETER  InputObject
 	#			The input to convert into a DataTable.
-	#	
+	#
 	#		.PARAMETER  Table
 	#			The DataTable you wish to load the input into.
-	#	
+	#
 	#		.PARAMETER RetainColumns
 	#			This switch tells the function to keep the DataTable's existing columns.
-	#		
+	#
 	#		.PARAMETER FilterWMIProperties
 	#			This switch removes WMI properties that start with an underline.
-	#	
+	#
 	#		.EXAMPLE
 	#			$DataTable = ConvertTo-DataTable -InputObject (Get-Process)
-	#	
+	#
 	#		.NOTES
 	#			SAPIEN Technologies, Inc.
 	#			http://www.sapien.com/
-	#	
+	#
 	#			VERSION HISTORY
 	#			1.0 ????/??/?? From Sapien.com Version
-	#			2.0 2014/12/03 Francois-Xavier Cat - In the rows workk, I added a 
+	#			2.0 2014/12/03 Francois-Xavier Cat - In the rows workk, I added a
 	#				small piece of code to handle the $null value with [DBNull]::Value
-	#				
+	#
 	#	#>
 	#	[CmdletBinding()]
 	#	[OutputType([System.Data.DataTable])]
@@ -1943,12 +1943,12 @@ RK5CYII=')
 	#		[switch]$RetainColumns,
 	#		[switch]$FilterWMIProperties
 	#	)
-	#	
+	#
 	#	if ($Table -eq $null)
 	#	{
 	#		$Table = New-Object System.Data.DataTable
 	#	}
-	#	
+	#
 	#	if ($InputObject -is [System.Data.DataTable])
 	#	{
 	#		$Table = $InputObject
@@ -1959,11 +1959,11 @@ RK5CYII=')
 	#		{
 	#			#Clear out the Table Contents
 	#			$Table.Clear()
-	#			
+	#
 	#			if ($InputObject -eq $null) { return } #Empty Data
-	#			
+	#
 	#			$object = $null
-	#			
+	#
 	#			#find the first non null value
 	#			foreach ($item in $InputObject)
 	#			{
@@ -1973,9 +1973,9 @@ RK5CYII=')
 	#					break
 	#				}
 	#			}
-	#			
+	#
 	#			if ($object -eq $null) { return } #All null then empty
-	#			
+	#
 	#			#COLUMN
 	#			#Get all the properties in order to create the columns
 	#			foreach ($prop in $object.PSObject.Get_Properties())
@@ -1984,13 +1984,13 @@ RK5CYII=')
 	#				{
 	#					#Get the type from the Definition string
 	#					$type = $null
-	#					
+	#
 	#					if ($prop.Value -ne $null)
 	#					{
 	#						try { $type = $prop.Value.GetType() }
 	#						catch { Write-Verbose -Message "Can't find type of $prop" }
 	#					}
-	#					
+	#
 	#					if ($type -ne $null) # -and [System.Type]::GetTypeCode($type) -ne 'Object')
 	#					{
 	#						Write-Verbose -Message "Creating Column: $($Prop.name) (Type: $type)"
@@ -2003,7 +2003,7 @@ RK5CYII=')
 	#					}
 	#				}
 	#			}
-	#			
+	#
 	#			if ($object -is [System.Data.DataRow])
 	#			{
 	#				foreach ($item in $InputObject)
@@ -2017,13 +2017,13 @@ RK5CYII=')
 	#		{
 	#			$Table.Rows.Clear()
 	#		}
-	#		
+	#
 	#		#Rows Work
 	#		foreach ($item in $InputObject)
 	#		{
 	#			# Create a new row object
 	#			$row = $table.NewRow()
-	#			
+	#
 	#			if ($item)
 	#			{
 	#				foreach ($prop in $item.PSObject.Get_Properties())
@@ -2039,7 +2039,7 @@ RK5CYII=')
 	#			[void]$table.Rows.Add($row)
 	#		}
 	#	}
-	#	
+	#
 	#	return @(, $Table)
 	#}
 	#
@@ -2057,11 +2057,11 @@ RK5CYII=')
 	#
 	#	.PARAMETER  Item
 	#		The object or objects you wish to load into the ComboBox's items collection.
-	#	
+	#
 	#	.PARAMETER  DataMember
 	#		Sets the name of the list or table in the data source for which the DataGridView is displaying data.
 	#	#>
-	#	
+	#
 	#	[CmdletBinding()]
 	#	Param (
 	#		[ValidateNotNull()]
@@ -2075,7 +2075,7 @@ RK5CYII=')
 	#	)
 	#	$DataGridView.SuspendLayout()
 	#	$DataGridView.DataMember = $DataMember
-	#	
+	#
 	#	if ($Item -is [System.ComponentModel.IListSource]`
 	#	-or $Item -is [System.ComponentModel.IBindingList] -or $Item -is [System.ComponentModel.IBindingListView] )
 	#	{
@@ -2084,18 +2084,18 @@ RK5CYII=')
 	#	else
 	#	{
 	#		$array = New-Object System.Collections.ArrayList
-	#		
+	#
 	#		if ($Item -is [System.Collections.IList])
 	#		{
 	#			$array.AddRange($Item)
 	#		}
 	#		else
-	#		{	
-	#			$array.Add($Item)	
+	#		{
+	#			$array.Add($Item)
 	#		}
 	#		$DataGridView.DataSource = $array
 	#	}
-	#	
+	#
 	#	$DataGridView.ResumeLayout()
 	#}
 	#
@@ -2145,7 +2145,7 @@ RK5CYII=')
 	#		{
 	#			$ButtonObject.Enabled = $false
 	#		}
-	#		
+	#
 	#	}
 	#}#Disable-Button
 	#
@@ -2215,25 +2215,25 @@ RK5CYII=')
 	#<#
 	#	.SYNOPSIS
 	#		The New-MessageBox functio will show a message box to the user
-	#	
+	#
 	#	.DESCRIPTION
 	#		The New-MessageBox functio will show a message box to the user
-	#	
+	#
 	#	.PARAMETER Message
 	#		Specifies the message to show
-	#	
+	#
 	#	.PARAMETER Title
 	#		Specifies the title of the message box
-	#	
+	#
 	#	.PARAMETER Buttons
 	#		Specifies which button to add. Just press tab to see the choices
-	#	
+	#
 	#	.PARAMETER Icon
 	#		Specifies the icon to show. Just press tab to see the choices
-	#	
+	#
 	#	.EXAMPLE
 	#		PS C:\> New-MessageBox -Message "Hello World" -Title "First Message" -Buttons "RetryCancel" -Icon "Asterix"
-	#	
+	#
 	#	.NOTES
 	#		Author: Francois-Xavier Cat
 	#		Twitter:@LazyWinAdm
@@ -2241,7 +2241,7 @@ RK5CYII=')
 	##>
 	#	[CmdletBinding()]
 	#	PARAM (
-	#		
+	#
 	#		[String]$Message,
 	#		[String]$Title,
 	#		[System.Windows.Forms.MessageBoxButtons]$Buttons = "OK",
@@ -3763,28 +3763,28 @@ function Invoke-Append-RichtextboxStatus_ps1
 			[string]$SourceColor = "Gray",
 			[string]$ComputerName,
 			[String]$ComputerNameColor = "Blue")
-		
+
 		$SortableTime = get-date -Format "yyyy-MM-dd HH:mm:ss"
 		$richtextboxStatus.SelectionColor = $DateTimeColor
 		$richtextboxStatus.AppendText("[$SortableTime] ")
-		
+
 		IF ($PSBoundParameters['ComputerName'])
 		{
 			$richtextboxStatus.SelectionColor = $ComputerNameColor
 			$richtextboxStatus.AppendText(("$ComputerName ").ToUpper())
 		}
-		
+
 		IF ($PSBoundParameters['Source'])
 		{
 			$richtextboxStatus.SelectionColor = $SourceColor
 			$richtextboxStatus.AppendText("$Source ")
 		}
-		
+
 		$richtextboxStatus.SelectionColor = $MessageColor
 		$richtextboxStatus.AppendText("$Message`r")
 		$richtextboxStatus.Refresh()
 		$richtextboxStatus.ScrollToCaret()
-		
+
 		Write-Verbose -Message "$SortableTime $Message"
 	}
 }
@@ -3812,34 +3812,34 @@ function Invoke-ConvertTo-DataTable_ps1
 		<#
 			.SYNOPSIS
 				Converts objects into a DataTable.
-		
+
 			.DESCRIPTION
 				Converts objects into a DataTable, which are used for DataBinding.
-		
+
 			.PARAMETER  InputObject
 				The input to convert into a DataTable.
-		
+
 			.PARAMETER  Table
 				The DataTable you wish to load the input into.
-		
+
 			.PARAMETER RetainColumns
 				This switch tells the function to keep the DataTable's existing columns.
-			
+
 			.PARAMETER FilterWMIProperties
 				This switch removes WMI properties that start with an underline.
-		
+
 			.EXAMPLE
 				$DataTable = ConvertTo-DataTable -InputObject (Get-Process)
-		
+
 			.NOTES
 				SAPIEN Technologies, Inc.
 				http://www.sapien.com/
-		
+
 				VERSION HISTORY
 				1.0 ????/??/?? From Sapien.com Version
-				2.0 2014/12/03 Francois-Xavier Cat - In the rows workk, I added a 
+				2.0 2014/12/03 Francois-Xavier Cat - In the rows workk, I added a
 					small piece of code to handle the $null value with [DBNull]::Value
-					
+
 		#>
 		[CmdletBinding()]
 		[OutputType([System.Data.DataTable])]
@@ -3851,12 +3851,12 @@ function Invoke-ConvertTo-DataTable_ps1
 			[switch]$RetainColumns,
 			[switch]$FilterWMIProperties
 		)
-		
+
 		if ($Table -eq $null)
 		{
 			$Table = New-Object System.Data.DataTable
 		}
-		
+
 		if ($InputObject -is [System.Data.DataTable])
 		{
 			$Table = $InputObject
@@ -3867,11 +3867,11 @@ function Invoke-ConvertTo-DataTable_ps1
 			{
 				#Clear out the Table Contents
 				$Table.Clear()
-				
+
 				if ($InputObject -eq $null) { return } #Empty Data
-				
+
 				$object = $null
-				
+
 				#find the first non null value
 				foreach ($item in $InputObject)
 				{
@@ -3881,9 +3881,9 @@ function Invoke-ConvertTo-DataTable_ps1
 						break
 					}
 				}
-				
+
 				if ($object -eq $null) { return } #All null then empty
-				
+
 				#COLUMN
 				#Get all the properties in order to create the columns
 				foreach ($prop in $object.PSObject.Get_Properties())
@@ -3892,13 +3892,13 @@ function Invoke-ConvertTo-DataTable_ps1
 					{
 						#Get the type from the Definition string
 						$type = $null
-						
+
 						if ($prop.Value -ne $null)
 						{
 							try { $type = $prop.Value.GetType() }
 							catch { Write-Verbose -Message "Can't find type of $prop" }
 						}
-						
+
 						if ($type -ne $null) # -and [System.Type]::GetTypeCode($type) -ne 'Object')
 						{
 							Write-Verbose -Message "Creating Column: $($Prop.name) (Type: $type)"
@@ -3911,7 +3911,7 @@ function Invoke-ConvertTo-DataTable_ps1
 						}
 					}
 				}
-				
+
 				if ($object -is [System.Data.DataRow])
 				{
 					foreach ($item in $InputObject)
@@ -3925,13 +3925,13 @@ function Invoke-ConvertTo-DataTable_ps1
 			{
 				$Table.Rows.Clear()
 			}
-			
+
 			#Rows Work
 			foreach ($item in $InputObject)
 			{
 				# Create a new row object
 				$row = $table.NewRow()
-				
+
 				if ($item)
 				{
 					foreach ($prop in $item.PSObject.Get_Properties())
@@ -3947,7 +3947,7 @@ function Invoke-ConvertTo-DataTable_ps1
 				[void]$table.Rows.Add($row)
 			}
 		}
-		
+
 		return @( , $Table)
 	}
 }
@@ -3984,7 +3984,7 @@ function Invoke-Disable-Button_ps1
 			{
 				$ButtonObject.Enabled = $false
 			}
-			
+
 		}
 	} #Disable-Button
 }
@@ -3995,79 +3995,79 @@ function Invoke-Disconnect-TSSession_ps1
 {
 	function Disconnect-TSSession
 	{
-		
+
 		<#
 		.SYNOPSIS
 			Disconnects any connected user from the session.
-	
+
 		.DESCRIPTION
 			Disconnect-TSSession disconnects any connected user from a session on local or remote computers.
-	
+
 		.PARAMETER ComputerName
 		    	The name of the terminal server computer. The default is the local computer. Default value is the local computer (localhost).
-	
+
 		.PARAMETER Id
 			Specifies the session Id number.
-	
+
 		.PARAMETER InputObject
 			   Specifies a session object. Enter a variable that contains the object, or type a command or expression that gets the sessions.
-	
+
 		.PARAMETER Synchronous
 		       When the Synchronous parameter is present the command waits until the session is fully disconnected otherwise it returns
 		       immediately, even though the session may not be completely disconnected yet.
-	
+
 		.PARAMETER Force
 		       Overrides any confirmations made by the command.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 | Disconnect-TSSession
-	
+
 			Description
 			-----------
 			Disconnects all connected users from Active sessions on remote computer 'comp1'. The caller is prompted to
 			By default, the caller is prompted to confirm each action.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -State Active | Disconnect-TSSession -Force
-	
+
 			Description
 			-----------
 			Disconnects any connected user from Active sessions on remote computer 'comp1'.
 			By default, the caller is prompted to confirm each action. To override confirmations, the Force Switch parameter is specified.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -State Active -Synchronous | Disconnect-TSSession -Force
-	
+
 			Description
 			-----------
 			Disconnects any connected user from Active sessions on remote computer 'comp1'. The Synchronous parameter tells the command to
 			wait until the session is fully disconnected and only tghen it proceeds to the next session object.
 			By default, the caller is prompted to confirm each action. To override confirmations, the Force Switch parameter is specified.
-	
+
 		.OUTPUTS
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Get-TSSession
 			Stop-TSSession
 			Send-TSMessage
 		#>
-		
+
 		[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High', DefaultParameterSetName = 'Id')]
 		Param (
-			
+
 			[Parameter()]
 			[Alias('CN', 'IPAddress')]
 			[System.String]$ComputerName = $script:server,
@@ -4088,14 +4088,14 @@ function Invoke-Disconnect-TSSession_ps1
 			[switch]$Synchronous,
 			[switch]$Force
 		)
-		
+
 		begin
 		{
 			try
 			{
 				$FuncName = $MyInvocation.MyCommand
 				Write-Verbose "[$funcName] Entering Begin block."
-				
+
 				if (!$ComputerName)
 				{
 					Write-Verbose "[$funcName] $ComputerName is not defined, loading global value '$script:Server'."
@@ -4105,17 +4105,17 @@ function Invoke-Disconnect-TSSession_ps1
 				{
 					$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 				}
-				
+
 				Write-Verbose "[$FuncName] Attempting remote connection to '$ComputerName'"
 				$TSManager = New-Object Cassia.TerminalServicesManager
 				$TSRemoteServer = $TSManager.GetRemoteServer($ComputerName)
 				$TSRemoteServer.Open()
-				
+
 				if (!$TSRemoteServer.IsOpen)
 				{
 					Throw 'Connection to remote server is not open. Use Connect-TSServer to connect first.'
 				}
-				
+
 				Write-Verbose "[$FuncName] Connection is open '$ComputerName'"
 				Write-Verbose "[$FuncName] Updating global Server name '$ComputerName'"
 				$null = Set-TSGlobalServerName -ComputerName $ComputerName
@@ -4125,13 +4125,13 @@ function Invoke-Disconnect-TSSession_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		Process
 		{
-			
+
 			Write-Verbose "[$funcName] Entering Process block."
-			
+
 			try
 			{
 				if ($PSCmdlet.ParameterSetName -eq 'Id')
@@ -4139,14 +4139,14 @@ function Invoke-Disconnect-TSSession_ps1
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$session = $TSRemoteServer.GetSession($Id)
 				}
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'InputObject')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$session = $InputObject
 				}
-				
-				
+
+
 				if ($session -ne $null)
 				{
 					if ($Force -or $PSCmdlet.ShouldProcess($TSRemoteServer.ServerName, "Disconnecting session id '$($session.sessionId)'"))
@@ -4167,7 +4167,7 @@ function Invoke-Disconnect-TSSession_ps1
 				Throw
 			}
 		}
-		
+
 		end
 		{
 			try
@@ -4219,7 +4219,7 @@ function Invoke-Enable-Button_ps1
 			}
 		}
 	} #Enable-Button
-	
+
 }
 #endregion Source: Enable-Button.ps1
 
@@ -4231,42 +4231,42 @@ function Invoke-Find-DataGridViewValue_ps1
 	<#
 		.SYNOPSIS
 			The Find-DataGridViewValue function helps you to find a specific value and select the cell, row or to set a fore and back color.
-		
+
 		.DESCRIPTION
 			The Find-DataGridViewValue function helps you to find a specific value and select the cell, row or to set a fore and back color.
-		
+
 		.PARAMETER DataGridView
 			Specifies the DataGridView Control to use
-		
+
 		.PARAMETER RowBackColor
 			Specifies the back color of the row to use
-		
+
 		.PARAMETER RowForeColor
 			Specifies the fore color of the row to use
-		
+
 		.PARAMETER SelectCell
 			Specifies to select only the cell when the value is found
-		
+
 		.PARAMETER SelectRow
 			Specifies to select the entire row when the value is found
-		
+
 		.PARAMETER Value
 			Specifies the value to search
-		
+
 		.EXAMPLE
 			PS C:\> Find-DataGridViewValue -DataGridView $datagridview1 -Value $textbox1.Text
-		
+
 			This will find the value and select the cell(s)
-		
+
 		.EXAMPLE
 			PS C:\> Find-DataGridViewValue -DataGridView $datagridview1 -Value $textbox1.Text -RowForeColor 'Red' -RowBackColor 'Black'
-		
+
 			This will find the value and color the fore and back of the row
 		.EXAMPLE
 			PS C:\> Find-DataGridViewValue -DataGridView $datagridview1 -Value $textbox1.Text -SelectRow
-		
+
 			This will find the value and select the entire row
-		
+
 		.NOTES
 			Francois-Xavier Cat
 			@lazywinadm
@@ -4284,35 +4284,35 @@ function Invoke-Find-DataGridViewValue_ps1
 			[Parameter(ParameterSetName = "Row")]
 			[Switch]$SelectRow,
 			#[Parameter(ParameterSetName = "Column")]
-	
+
 			#[Switch]$SelectColumn,
-	
+
 			[Parameter(ParameterSetName = "RowColor")]
 			[system.Drawing.Color]$RowForeColor,
 			[Parameter(ParameterSetName = "RowColor")]
 			[system.Drawing.Color]$RowBackColor
 		)
-		
+
 		PROCESS
 		{
 			$DataGridView.ClearSelection()
-			
+
 			FOR ([int]$i = 0; $i -lt $DataGridView.RowCount; $i++)
 			{
 				FOR ([int]$j = 0; $j -lt $DataGridView.ColumnCount; $j++)
 				{
 					$CurrentCell = $dataGridView.Rows[$i].Cells[$j]
-					
+
 					#if ((-not $CurrentCell.Value.Equals([DBNull]::Value)) -and ($CurrentCell.Value.ToString() -like "*$Value*"))
 					if ($CurrentCell.Value.ToString() -match $Value)
 					{
-						
+
 						# Row Selection
 						IF ($PSBoundParameters['SelectRow'])
 						{
 							$dataGridView.Rows[$i].Selected = $true
 						}
-						
+
 						<#
 						# Column Selection
 						IF ($PSBoundParameters['SelectColumn'])
@@ -4322,7 +4322,7 @@ function Invoke-Find-DataGridViewValue_ps1
 							#$CurrentCell.DataGridView.Columns[$j].Selected = $true
 						}
 						#>
-						
+
 						# Row Fore Color
 						IF ($PSBoundParameters['RowForeColor'])
 						{
@@ -4333,7 +4333,7 @@ function Invoke-Find-DataGridViewValue_ps1
 						{
 							$dataGridView.Rows[$i].DefaultCellStyle.BackColor = $RowBackColor
 						}
-						
+
 						# Cell Selection
 						ELSEIF (-not ($PSBoundParameters['SelectRow']) -and -not ($PSBoundParameters['SelectColumn']))
 						{
@@ -4352,42 +4352,42 @@ function Invoke-Get-TSCurrentSession_ps1
 {
 	function Get-TSCurrentSession
 	{
-		
+
 		<#
 		.SYNOPSIS
 			Provides information about the session in which the current process is running.
-	
+
 		.DESCRIPTION
 			Provides information about the session in which the current process is running.
-	
+
 		.EXAMPLE
 			Get-TSCurrentSession
-	
+
 			Description
 			-----------
 			Displays the session in which the current process is running on the local computer.
-	
+
 		.OUTPUTS
 			Cassia.Impl.TerminalServicesSession
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Get-TSSession
 		#>
-		
-		
+
+
 		[OutputType('Cassia.Impl.TerminalServicesSession')]
 		[CmdletBinding()]
 		param (
@@ -4395,12 +4395,12 @@ function Invoke-Get-TSCurrentSession_ps1
 			[Alias('CN', 'IPAddress')]
 			[System.String]$ComputerName = $script:server
 		)
-		
-		
+
+
 		try
 		{
 			$FuncName = $MyInvocation.MyCommand
-			
+
 			if (!$ComputerName)
 			{
 				Write-Verbose "[$funcName] ComputerName is not defined, loading global value '$script:Server'."
@@ -4410,24 +4410,24 @@ function Invoke-Get-TSCurrentSession_ps1
 			{
 				$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 			}
-			
+
 			Write-Verbose "[$funcName] Attempting remote connection to '$ComputerName'"
 			$TSManager = New-Object Cassia.TerminalServicesManager
 			$TSRemoteServer = $TSManager.GetRemoteServer($ComputerName)
 			$TSRemoteServer.Open()
-			
+
 			if (!$TSRemoteServer.IsOpen)
 			{
 				Throw 'Connection to remote server is not open. Use Connect-TSServer to connect first.'
 			}
-			
+
 			Write-Verbose "[$funcName] Connection is open '$ComputerName'"
 			Write-Verbose "[$funcName] Updating global Server name '$ComputerName'"
 			$null = Set-TSGlobalServerName -ComputerName $ComputerName
-			
+
 			Write-Verbose "[$funcName] Get CurrentSession from '$ComputerName'"
 			$TSManager.CurrentSession
-			
+
 			Write-Verbose "[$funcName] Disconnecting from remote server '$($TSRemoteServer.ServerName)'"
 			$TSRemoteServer.Close()
 			$TSRemoteServer.Dispose()
@@ -4455,76 +4455,76 @@ function Invoke-Get-TSProcess_ps1
 {
 	function Get-TSProcess
 	{
-		
+
 		<#
 		.SYNOPSIS
 			Gets a list of processes running in a specific session or in all sessions.
-	
+
 		.DESCRIPTION
 			Use Get-TSProcess to get a list of session processes from a local or remote computers.
-	
+
 		.PARAMETER ComputerName
 		    	The name of the terminal server computer. The default is the local computer. Default value is the local computer (localhost).
-	
+
 		.PARAMETER Id
 			Specifies the process Id number.
-	
+
 		.PARAMETER InputObject
 			   Specifies a process object. Enter a variable that contains the object, or type a command or expression that gets the sessions.
-	
+
 		.PARAMETER Name
 			   Specifies the process name. Wildcards are permitted.
-	
+
 		.PARAMETER Session
 			Specifies the session Id number.
-	
+
 		.EXAMPLE
 			Get-TSProcess
-	
+
 			Description
 			-----------
 			Gets all the sessions processes from the local computer.
-	
+
 		.EXAMPLE
 			Get-TSSession -Id 0 -ComputerName comp1 | Get-TSProcess
-	
+
 			Description
 			-----------
 			Gets all processes connected to session id 0 from remote computer 'comp1'.
-	
+
 		.EXAMPLE
 			Get-TSProcess -Name s* -ComputerName comp1
-	
+
 			Description
 			-----------
 			Gets all the processes with name starts with the letter 's' from remote computer 'comp1'.
-	
+
 		.OUTPUTS
 			Cassia.Impl.TerminalServicesProcess
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Get-TSSession
 			Stop-TSProcess
 		#>
-		
-		
+
+
 		[OutputType('Cassia.Impl.TerminalServicesProcess')]
 		[CmdletBinding(DefaultParameterSetName = 'Name')]
 		Param (
-			
+
 			[Parameter()]
 			[Alias('CN', 'IPAddress')]
 			[System.String]$ComputerName = $script:server,
@@ -4560,14 +4560,14 @@ function Invoke-Get-TSProcess_ps1
 			[Alias('SessionId')]
 			[Cassia.Impl.TerminalServicesSession]$Session
 		)
-		
-		
-		
+
+
+
 		begin
 		{
 			$FuncName = $MyInvocation.MyCommand
 			Write-Verbose "[$funcName] Entering Begin block."
-			
+
 			if (!$ComputerName)
 			{
 				Write-Verbose "[$funcName] $ComputerName is not defined, loading global value '$script:Server'."
@@ -4577,32 +4577,32 @@ function Invoke-Get-TSProcess_ps1
 			{
 				$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 			}
-			
+
 			Write-Verbose "[$FuncName] Attempting remote connection to '$ComputerName'"
 			$TSManager = New-Object Cassia.TerminalServicesManager
 			$TSRemoteServer = $TSManager.GetRemoteServer($ComputerName)
 			$TSRemoteServer.Open()
-			
+
 			if (!$TSRemoteServer.IsOpen)
 			{
 				Throw 'Connection to remote server is not open. Use Connect-TSServer to connect first.'
 			}
-			
+
 			Write-Verbose "[$FuncName] Connection is open '$ComputerName'"
 			Write-Verbose "[$FuncName] Updating global Server name '$ComputerName'"
 			$null = Set-TSGlobalServerName -ComputerName $ComputerName
 		}
-		
-		
-		
+
+
+
 		Process
 		{
-			
+
 			Write-Verbose "[$funcName] Entering Process block."
-			
+
 			try
 			{
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'Name')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
@@ -4615,7 +4615,7 @@ function Invoke-Get-TSProcess_ps1
 						$proc = $TSRemoteServer.GetProcesses() | Where-Object { $_.ProcessName -like $Name }
 					}
 				}
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'Id')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
@@ -4628,8 +4628,8 @@ function Invoke-Get-TSProcess_ps1
 						$proc = $TSRemoteServer.GetProcess($Id)
 					}
 				}
-				
-				
+
+
 				if ($PSCmdlet.ParameterSetName -eq 'Session')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
@@ -4638,15 +4638,15 @@ function Invoke-Get-TSProcess_ps1
 						$proc = $Session.GetProcesses()
 					}
 				}
-				
-				
+
+
 				if ($PSCmdlet.ParameterSetName -eq 'InputObject')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$proc = $InputObject
 				}
-				
-				
+
+
 				if ($proc)
 				{
 					$proc
@@ -4657,8 +4657,8 @@ function Invoke-Get-TSProcess_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		end
 		{
 			try
@@ -4674,7 +4674,7 @@ function Invoke-Get-TSProcess_ps1
 			}
 		}
 	}
-	
+
 }
 #endregion Source: Get-TSProcess.ps1
 
@@ -4683,47 +4683,47 @@ function Invoke-Get-TSServers_ps1
 {
 	function Get-TSServers
 	{
-		
+
 		<#
 		.SYNOPSIS
 			Enumerates all terminal servers in a given domain.
-	
+
 		.DESCRIPTION
 			Enumerates all terminal servers in a given domain.
-	
+
 		.PARAMETER ComputerName
 		    	The name of the terminal server computer. The default is the local computer. Default value is the local computer (localhost).
-	
+
 		.PARAMETER DomainName
 			The name of the domain. The default is the caller domain name ($env:USERDOMAIN).
-	
+
 		.EXAMPLE
 			Get-TSDomainServers
-	
+
 			Description
 			-----------
 			Get a list of all terminal servers of the caller default domain.
-	
+
 		.OUTPUTS
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Get-TSSession
 		#>
-		
-		
+
+
 		[OutputType('System.Management.Automation.PSCustomObject')]
 		[CmdletBinding()]
 		Param (
@@ -4733,8 +4733,8 @@ function Invoke-Get-TSServers_ps1
 			)]
 			[System.String]$DomainName = $env:USERDOMAIN
 		)
-		
-		
+
+
 		try
 		{
 			$FuncName = $MyInvocation.MyCommand
@@ -4747,7 +4747,7 @@ function Invoke-Get-TSServers_ps1
 			{
 				$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 			}
-			
+
 			Write-Verbose "[$funcName] Enumerating terminal servers for '$DomainName' domain."
 			Write-Warning 'Depending on your environment the command may take a while to complete.'
 			$TSManager = New-Object Cassia.TerminalServicesManager
@@ -4757,7 +4757,7 @@ function Invoke-Get-TSServers_ps1
 		{
 			Throw
 		}
-		
+
 	}
 }
 #endregion Source: Get-TSServers.ps1
@@ -4770,42 +4770,42 @@ function Invoke-Get-TSSession_ps1
 		<#
 		.SYNOPSIS
 			Lists the sessions on a given terminal server.
-	
+
 		.DESCRIPTION
 			Use Get-TSSession to get a list of sessions from a local or remote computers.
 			Note that Get-TSSession is using Aliased properties to display the output on the console (IPAddress and State), these attributes
 			are not the same as the original attributes (ClientIPAddress and ConnectionState).
 			This is important when you want to use the -Filter parameter which requires the latter.
 			To see all aliassed properties and their corresponding properties (Definition column), pipe the result to Get-Member:
-	
+
 			PS > Get-TSSession | Get-Member -MemberType AliasProperty
-	
+
 			   TypeName: Cassia.Impl.TerminalServicesSession
-	
+
 			Name      MemberType    Definition
 			----      ----------    ----------
 			(...)
 			IPAddress AliasProperty IPAddress = ClientIPAddress
 			State     AliasProperty State = ConnectionState
-	
-	
+
+
 		.PARAMETER ComputerName
 		    	The name of the terminal server computer. The default is the local computer. Default value is the local computer (localhost).
-	
+
 		.PARAMETER Id
 			Specifies the session Id number.
-	
+
 		.PARAMETER InputObject
 			   Specifies a session object. Enter a variable that contains the object, or type a command or expression that gets the sessions.
-	
+
 		.PARAMETER Filter
 			   Specifies a filter based on the session properties. The syntax of the filter, including the use of
 			   wildcards and depends on the properties of the session. Internally, The Filter parameter uses client side
 			   filtering using the Where-Object cmdlet, objects are filtered after they are retrieved.
-	
+
 		.PARAMETER State
 			The connection state of the session. Use this parameter to get sessions of a specific state. Valid values are:
-	
+
 			Value		 Description
 			-----		 -----------
 			Active		 A user is logged on to the session.
@@ -4818,76 +4818,76 @@ function Invoke-Get-TSSession_ps1
 			Listening 	 The session is listening for connections.
 			Reset		 The session is being reset.
 			Shadowing	 This session is shadowing another session.
-	
+
 		.PARAMETER ClientName
 			The name of the machine last connected to a session.
 			Use this parameter to get sessions made from a specific computer name. Wildcrads are permitted.
-	
+
 		.PARAMETER UserName
 			Use this parameter to get sessions made by a specific user name. Wildcrads are permitted.
-	
+
 		.EXAMPLE
 			Get-TSSession
-	
+
 			Description
 			-----------
 			Gets all the sessions from the local computer.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -State Disconnected
-	
+
 			Description
 			-----------
 			Gets all the disconnected sessions from the remote computer 'comp1'.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -Filter {$_.ClientIPAddress -like '10*' -AND $_.ConnectionState -eq 'Active'}
-	
+
 			Description
 			-----------
 			Gets all Active sessions from remote computer 'comp1', made from ip addresses that starts with '10'.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -UserName a*
-	
+
 			Description
 			-----------
 			Gets all sessions from remote computer 'comp1' made by users with name starts with the letter 'a'.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -ClientName s*
-	
+
 			Description
 			-----------
 			Gets all sessions from remote computer 'comp1' made from a computers names that starts with the letter 's'.
-	
+
 		.OUTPUTS
 			Cassia.Impl.TerminalServicesSession
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Stop-TSSession
 			Disconnect-TSSession
 			Send-TSMessage
 		#>
-		
-		
+
+
 		[OutputType('Cassia.Impl.TerminalServicesSession')]
 		[CmdletBinding(DefaultParameterSetName = 'Session')]
 		Param (
-			
+
 			[Parameter()]
 			[Alias('CN', 'IPAddress')]
 			[System.String]$ComputerName,
@@ -4920,15 +4920,15 @@ function Invoke-Get-TSSession_ps1
 			[Parameter()]
 			[System.String]$UserName = '*'
 		)
-		
-		
+
+
 		begin
 		{
 			try
 			{
 				$FuncName = $MyInvocation.MyCommand
 				Write-Verbose "[$funcName] Entering Begin block."
-				
+
 				if (!$ComputerName)
 				{
 					Write-Verbose "[$funcName] $ComputerName is not defined, loading global value '$script:Server'."
@@ -4938,18 +4938,18 @@ function Invoke-Get-TSSession_ps1
 				{
 					$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 				}
-				
-				
+
+
 				Write-Verbose "[$FuncName] Attempting remote connection to '$ComputerName'"
 				$TSManager = New-Object Cassia.TerminalServicesManager
 				$TSRemoteServer = $TSManager.GetRemoteServer($ComputerName)
 				$TSRemoteServer.Open()
-				
+
 				if (!$TSRemoteServer.IsOpen)
 				{
 					Throw 'Connection to remote server is not open. Use Connect-TSServer to connect first.'
 				}
-				
+
 				Write-Verbose "[$FuncName] Connection is open '$ComputerName'"
 				Write-Verbose "[$FuncName] Updating global Server name '$ComputerName'"
 				$null = Set-TSGlobalServerName -ComputerName $ComputerName
@@ -4959,13 +4959,13 @@ function Invoke-Get-TSSession_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		Process
 		{
-			
+
 			Write-Verbose "[$funcName] Entering Process block."
-			
+
 			try
 			{
 				if ($PSCmdlet.ParameterSetName -eq 'Session')
@@ -4980,20 +4980,20 @@ function Invoke-Get-TSSession_ps1
 						$session = $TSRemoteServer.GetSession($Id)
 					}
 				}
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'InputObject')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$session = $InputObject
 				}
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'Filter')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
-					
+
 					$TSRemoteServer.GetSessions() | Where-Object $Filter
 				}
-				
+
 				if ($session)
 				{
 					$session | Where-Object { $_.ConnectionState -like $State -AND $_.UserName -like $UserName -AND $_.ClientName -like $ClientName } | `
@@ -5006,7 +5006,7 @@ function Invoke-Get-TSSession_ps1
 				Throw
 			}
 		}
-		
+
 		end
 		{
 			try
@@ -5033,20 +5033,20 @@ function Invoke-Load-DataGridView_ps1
 		<#
 		.SYNOPSIS
 			This functions helps you load items into a DataGridView.
-	
+
 		.DESCRIPTION
 			Use this function to dynamically load items into the DataGridView control.
-	
+
 		.PARAMETER  DataGridView
 			The ComboBox control you want to add items to.
-	
+
 		.PARAMETER  Item
 			The object or objects you wish to load into the ComboBox's items collection.
-		
+
 		.PARAMETER  DataMember
 			Sets the name of the list or table in the data source for which the DataGridView is displaying data.
 		#>
-		
+
 		[CmdletBinding()]
 		Param (
 			[ValidateNotNull()]
@@ -5060,7 +5060,7 @@ function Invoke-Load-DataGridView_ps1
 		)
 		$DataGridView.SuspendLayout()
 		$DataGridView.DataMember = $DataMember
-		
+
 		if ($Item -is [System.ComponentModel.IListSource]`
 			-or $Item -is [System.ComponentModel.IBindingList] -or $Item -is [System.ComponentModel.IBindingListView])
 		{
@@ -5069,7 +5069,7 @@ function Invoke-Load-DataGridView_ps1
 		else
 		{
 			$array = New-Object System.Collections.ArrayList
-			
+
 			if ($Item -is [System.Collections.IList])
 			{
 				$array.AddRange($Item)
@@ -5080,7 +5080,7 @@ function Invoke-Load-DataGridView_ps1
 			}
 			$DataGridView.DataSource = $array
 		}
-		
+
 		$DataGridView.ResumeLayout()
 	}
 }
@@ -5094,25 +5094,25 @@ function Invoke-New-MessageBox_ps1
 	<#
 		.SYNOPSIS
 			The New-MessageBox functio will show a message box to the user
-		
+
 		.DESCRIPTION
 			The New-MessageBox functio will show a message box to the user
-		
+
 		.PARAMETER Message
 			Specifies the message to show
-		
+
 		.PARAMETER Title
 			Specifies the title of the message box
-		
+
 		.PARAMETER Buttons
 			Specifies which button to add. Just press tab to see the choices
-		
+
 		.PARAMETER Icon
 			Specifies the icon to show. Just press tab to see the choices
-		
+
 		.EXAMPLE
 			PS C:\> New-MessageBox -Message "Hello World" -Title "First Message" -Buttons "RetryCancel" -Icon "Asterix"
-		
+
 		.NOTES
 			Author: Francois-Xavier Cat
 			Twitter:@LazyWinAdm
@@ -5120,7 +5120,7 @@ function Invoke-New-MessageBox_ps1
 	#>
 		[CmdletBinding()]
 		PARAM (
-			
+
 			[String]$Message,
 			[String]$Title,
 			[System.Windows.Forms.MessageBoxButtons]$Buttons = "OK",
@@ -5146,16 +5146,16 @@ function Invoke-Reset-DataGridViewFormat_ps1
 	<#
 		.SYNOPSIS
 			The Reset-DataGridViewFormat function will reset the format of a datagridview control
-		
+
 		.DESCRIPTION
 			The Reset-DataGridViewFormat function will reset the format of a datagridview control
-		
+
 		.PARAMETER DataGridView
 			Specifies the DataGridView Control.
-		
+
 		.EXAMPLE
 			PS C:\> Reset-DataGridViewFormat -DataGridView $DataGridViewObj
-		
+
 		.NOTES
 			Author: Francois-Xavier Cat
 			Twitter:@LazyWinAdm
@@ -5170,7 +5170,7 @@ function Invoke-Reset-DataGridViewFormat_ps1
 			$DataSource = $DataGridView.DataSource
 			$DataGridView.DataSource = $null
 			$DataGridView.DataSource = $DataSource
-			
+
 			#$DataGridView.RowsDefaultCellStyle.BackColor = 'White'
 			#$DataGridView.RowsDefaultCellStyle.ForeColor = 'Black'
 			$DataGridView.RowsDefaultCellStyle = $null
@@ -5211,54 +5211,54 @@ function Invoke-Send-TSMessage_ps1
 {
 	function Send-TSMessage
 	{
-		
+
 		<#
 		.SYNOPSIS
 			Displays a message box in the specified session Id.
-	
+
 		.DESCRIPTION
 			Use Send-TSMessage display a message box in the specified session Id.
-	
+
 		.PARAMETER ComputerName
 		    	The name of the terminal server computer. The default is the local computer. Default value is the local computer (localhost).
-	
+
 		.PARAMETER Text
 			The text to display in the message box.
-	
+
 		.PARAMETER SessionID
 			The number of the session Id.
-	
+
 		.PARAMETER Caption
 			   The caption of the message box. The default caption is 'Alert'.
-	
+
 		.EXAMPLE
 			$Message = "Importnat message`n, the server is going down for maintanace in 10 minutes. Please save your work and logoff."
 			Get-TSSession -State Active -ComputerName comp1 | Send-TSMessage -Message $Message
-	
+
 			Description
 			-----------
 			Displays a message box inside all active sessions of computer name 'comp1'.
-	
+
 		.OUTPUTS
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Get-TSSession
 		#>
-		
-		
+
+
 		[CmdletBinding(DefaultParameterSetName = 'Session')]
 		Param (
 			[Parameter()]
@@ -5291,14 +5291,14 @@ function Invoke-Send-TSMessage_ps1
 			)]
 			[Cassia.Impl.TerminalServicesSession]$InputObject
 		)
-		
+
 		begin
 		{
 			try
 			{
 				$FuncName = $MyInvocation.MyCommand
 				Write-Verbose "[$funcName] Entering Begin block."
-				
+
 				if (!$ComputerName)
 				{
 					Write-Verbose "[$funcName] $ComputerName is not defined, loading global value '$script:Server'."
@@ -5308,17 +5308,17 @@ function Invoke-Send-TSMessage_ps1
 				{
 					$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 				}
-				
+
 				Write-Verbose "[$FuncName] Attempting remote connection to '$ComputerName'"
 				$TSManager = New-Object Cassia.TerminalServicesManager
 				$TSRemoteServer = $TSManager.GetRemoteServer($ComputerName)
 				$TSRemoteServer.Open()
-				
+
 				if (!$TSRemoteServer.IsOpen)
 				{
 					Throw 'Connection to remote server is not open. Use Connect-TSServer to connect first.'
 				}
-				
+
 				Write-Verbose "[$FuncName] Connection is open '$ComputerName'"
 				Write-Verbose "[$FuncName] Updating global Server name '$ComputerName'"
 				$null = Set-TSGlobalServerName -ComputerName $ComputerName
@@ -5328,16 +5328,16 @@ function Invoke-Send-TSMessage_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		process
 		{
-			
+
 			Write-Verbose "[$funcName] Entering Process block."
-			
+
 			try
 			{
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'Session')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
@@ -5346,13 +5346,13 @@ function Invoke-Send-TSMessage_ps1
 						$session = $TSRemoteServer.GetSession($Id)
 					}
 				}
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'InputObject')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$session = $InputObject
 				}
-				
+
 				if ($session)
 				{
 					Write-Verbose "[$FuncName] Sending alert message to session id: '$($session.SessionId)' on '$ComputerName'"
@@ -5364,8 +5364,8 @@ function Invoke-Send-TSMessage_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		end
 		{
 			try
@@ -5392,28 +5392,28 @@ function Invoke-Set-DataGridView_ps1
 		<#
 			.SYNOPSIS
 				This function helps you edit the datagridview control
-		
+
 			.DESCRIPTION
 				This function helps you edit the datagridview control
-		
+
 			.EXAMPLE
 				Set-DataGridView -DataGridView $datagridview1 -ProperFormat -FontFamily $listboxFontFamily.Text -FontSize $listboxFontSize.Text
-		
+
 			.EXAMPLE
 				Set-DataGridView -DataGridView $datagridview1 -AlternativeRowColor -BackColor 'AliceBlue' -ForeColor 'Black'
-		
+
 			.EXAMPLE
 				Set-DataGridViewRowHeader -DataGridView $datagridview1 -HideRowHeader
-		
+
 			.EXAMPLE
 				Set-DataGridViewRowHeader -DataGridView $datagridview1 -ShowRowHeader
-		
+
 			.NOTES
 				Author: Francois-Xavier Cat
 				Twitter:@LazyWinAdm
 				WWW: 	lazywinadmin.com
 		#>
-		
+
 		[CmdletBinding()]
 		PARAM (
 			[ValidateNotNull()]
@@ -5447,28 +5447,28 @@ function Invoke-Set-DataGridView_ps1
 				$DataGridView.AlternatingRowsDefaultCellStyle.ForeColor = $ForeColor
 				$DataGridView.AlternatingRowsDefaultCellStyle.BackColor = $BackColor
 			}
-			
+
 			if ($psboundparameters['DefaultRowColor'])
 			{
 				$DataGridView.RowsDefaultCellStyle.ForeColor = $ForeColor
 				$DataGridView.RowsDefaultCellStyle.BackColor = $BackColor
 			}
-			
-			
+
+
 			if ($psboundparameters['ProperFormat'])
 			{
 				#$Font = New-Object -TypeName System.Drawing.Font -ArgumentList "Segoi UI", 10
 				$Font = New-Object -TypeName System.Drawing.Font -ArgumentList $FontFamily, $FontSize
-				
+
 				#[System.Drawing.FontStyle]::Bold
-				
+
 				$DataGridView.ColumnHeadersBorderStyle = 'Raised'
 				$DataGridView.BorderStyle = 'Fixed3D'
 				$DataGridView.SelectionMode = 'FullRowSelect'
 				$DataGridView.AllowUserToResizeRows = $false
 				$datagridview.DefaultCellStyle.font = $Font
 			}
-			
+
 			if ($psboundparameters['HideRowHeader'])
 			{
 				$DataGridView.RowHeadersVisible = $false
@@ -5478,7 +5478,7 @@ function Invoke-Set-DataGridView_ps1
 				$DataGridView.RowHeadersVisible = $true
 			}
 		}
-		
+
 	} #Set-DataGridView
 }
 #endregion Source: Set-DataGridView.ps1
@@ -5491,33 +5491,33 @@ function Invoke-Set-DataGridViewFilter_ps1
 	<#
 		.SYNOPSIS
 			The function Set-DataGridViewFilter helps to only show specific entries with a specific value
-		
+
 		.DESCRIPTION
 			The function Set-DataGridViewFilter helps to only show specific entries with a specific value.
 			The data needs to be in a DataTable Object. You can use ConvertTo-DataTable to convert your
 			PowerShell object into a DataTable object.
-		
+
 		.PARAMETER AllColumns
 			Specifies to search all the column
-		
+
 		.PARAMETER ColumnName
 			Specifies to search in a specific column name
-		
+
 		.PARAMETER DataGridView
 			Specifies the DataGridView control where the data will be filtered
-		
+
 		.PARAMETER DataTable
 			Specifies the DataTable object that is most likely the original source of the DataGridView
-		
+
 		.PARAMETER Filter
 			Specifies the string to search
-		
+
 		.EXAMPLE
 			PS C:\> Set-DataGridViewFilter -DataGridView $datagridview1 -DataTable $ProcessesDT -AllColumns -Filter $textbox1.Text
-		
+
 		.EXAMPLE
 			PS C:\> Set-DataGridViewFilter -DataGridView $datagridview1 -DataTable $ProcessesDT -ColumnName "Name" -Filter $textbox1.Text
-	
+
 		.NOTES
 			Author: Francois-Xavier Cat
 			Twitter:@LazyWinAdm
@@ -5538,7 +5538,7 @@ function Invoke-Set-DataGridViewFilter_ps1
 		PROCESS
 		{
 			$Filter = $Filter.ToString()
-			
+
 			IF ($PSBoundParameters['AllColumns'])
 			{
 				FOREACH ($Column in $DataTable.Columns)
@@ -5546,17 +5546,17 @@ function Invoke-Set-DataGridViewFilter_ps1
 					#$RowFilter += "Convert("+$($Column.ColumnName)+",'system.string') Like '%"{1}%' OR " -f $Column.ColumnName, $Filter
 					$RowFilter += "Convert($($Column.ColumnName),'system.string') Like '%$Filter%' OR "
 				}
-				
+
 				# Remove the last 'OR'
 				$RowFilter = $RowFilter -replace " OR $", ''
-				
+
 				#Append-RichtextboxStatus -Message $RowFilter
 			}
 			IF ($PSBoundParameters['ColumnName'])
 			{
 				$RowFilter = "$ColumnName LIKE '%$Filter%'"
 			}
-			
+
 			$DataTable.defaultview.rowfilter = $RowFilter
 			Load-DataGridView -DataGridView $DataGridView -Item $DataTable
 		}
@@ -5599,16 +5599,16 @@ function Invoke-Set-TSGlobalServerName_ps1
 			[ValidateNotNullOrEmpty()]
 			[System.String]$ComputerName
 		)
-		
+
 		if ($ComputerName -eq "." -OR $ComputerName -eq $env:COMPUTERNAME)
 		{
 			$ComputerName = 'localhost'
 		}
-		
+
 		$script:Server = $ComputerName
 		$script:Server
 	}
-	
+
 }
 #endregion Source: Set-TSGlobalServerName.ps1
 
@@ -5617,67 +5617,67 @@ function Invoke-Stop-TSProcess_ps1
 {
 	function Stop-TSProcess
 	{
-		
+
 		<#
 		.SYNOPSIS
 			Terminates the process running in a specific session or in all sessions.
-	
+
 		.DESCRIPTION
 			Use Stop-TSProcess to terminate one or more processes from a local or remote computers.
-	
+
 		.PARAMETER ComputerName
 		    	The name of the terminal server computer. The default is the local computer. Default value is the local computer (localhost).
-	
+
 		.PARAMETER Id
 			Specifies the process Id number.
-	
+
 		.PARAMETER InputObject
 			Specifies a process object. Enter a variable that contains the object, or type a command or expression that gets the sessions.
-	
+
 		.PARAMETER Name
 			Specifies the process name.
-	
+
 		.PARAMETER Session
 			Specifies the session Id number.
-	
+
 		.PARAMETER Force
 		       Overrides any confirmations made by the command.
-	
+
 		.EXAMPLE
 			 Get-TSProcess -Id 6552 | Stop-TSProcess
-	
+
 			Description
 			-----------
 			Gets process Id 6552 from the local computer and stop it. Confirmations needed.
-	
+
 		.EXAMPLE
 			Get-TSSession -Id 3 -ComputerName comp1 | Stop-TSProcess -Force
-	
+
 			Description
 			-----------
 			Terminats all processes connected to session id 3 from remote computer 'comp1', suppress confirmations.
-	
+
 		.OUTPUTS
 			Cassia.Impl.TerminalServicesProcess
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Get-TSProcess
 			Get-TSSession
 		#>
-		
+
 		[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High', DefaultParameterSetName = 'Name')]
 		Param (
 			[Parameter()]
@@ -5716,15 +5716,15 @@ function Invoke-Stop-TSProcess_ps1
 			[Cassia.Impl.TerminalServicesSession]$Session,
 			[switch]$Force
 		)
-		
-		
+
+
 		begin
 		{
 			try
 			{
 				$FuncName = $MyInvocation.MyCommand
 				Write-Verbose "[$funcName] Entering Begin block."
-				
+
 				if (!$ComputerName)
 				{
 					Write-Verbose "[$funcName] $ComputerName is not defined, loading global value '$script:Server'."
@@ -5734,17 +5734,17 @@ function Invoke-Stop-TSProcess_ps1
 				{
 					$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 				}
-				
+
 				Write-Verbose "[$FuncName] Attempting remote connection to '$ComputerName'"
 				$TSManager = New-Object Cassia.TerminalServicesManager
 				$TSRemoteServer = $TSManager.GetRemoteServer($ComputerName)
 				$TSRemoteServer.Open()
-				
+
 				if (!$TSRemoteServer.IsOpen)
 				{
 					Throw 'Connection to remote server is not open. Use Connect-TSServer to connect first.'
 				}
-				
+
 				Write-Verbose "[$FuncName] Connection is open '$ComputerName'"
 				Write-Verbose "[$FuncName] Updating global Server name '$ComputerName'"
 				$null = Set-TSGlobalServerName -ComputerName $ComputerName
@@ -5754,16 +5754,16 @@ function Invoke-Stop-TSProcess_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		Process
 		{
-			
+
 			Write-Verbose "[$funcName] Entering Process block."
-			
+
 			try
 			{
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'Name')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
@@ -5776,7 +5776,7 @@ function Invoke-Stop-TSProcess_ps1
 						$proc = $TSRemoteServer.GetProcesses() | Where-Object { $_.ProcessName -like $Name }
 					}
 				}
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'Id')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
@@ -5789,8 +5789,8 @@ function Invoke-Stop-TSProcess_ps1
 						$proc = $TSRemoteServer.GetProcess($Id)
 					}
 				}
-				
-				
+
+
 				if ($PSCmdlet.ParameterSetName -eq 'Session')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
@@ -5799,15 +5799,15 @@ function Invoke-Stop-TSProcess_ps1
 						$proc = $Session.GetProcesses()
 					}
 				}
-				
-				
+
+
 				if ($PSCmdlet.ParameterSetName -eq 'InputObject')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$proc = $InputObject
 				}
-				
-				
+
+
 				if ($proc)
 				{
 					foreach ($p in $proc)
@@ -5825,8 +5825,8 @@ function Invoke-Stop-TSProcess_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		end
 		{
 			try
@@ -5850,79 +5850,79 @@ function Invoke-Stop-TSSession_ps1
 {
 	function Stop-TSSession
 	{
-		
+
 		<#
 		.SYNOPSIS
 			Logs the session off, disconnecting any user that might be connected.
-	
+
 		.DESCRIPTION
 			Use Stop-TSSession to logoff the session and disconnect any user that might be connected.
-	
+
 		.PARAMETER ComputerName
 		    	The name of the terminal server computer. The default is the local computer. Default value is the local computer (localhost).
-	
+
 		.PARAMETER Id
 			Specifies the session Id number.
-	
+
 		.PARAMETER InputObject
 			   Specifies a session object. Enter a variable that contains the object, or type a command or expression that gets the sessions.
-	
+
 		.PARAMETER Synchronous
 		       When the Synchronous parameter is present the command waits until the session is fully disconnected otherwise it returns
 		       immediately, even though the session may not be completely disconnected yet.
-	
+
 		.PARAMETER Force
 		       Overrides any confirmations made by the command.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 | Stop-TSSession
-	
+
 			Description
 			-----------
 			logs off all connected users from Active sessions on remote computer 'comp1'. The caller is prompted to
 			By default, the caller is prompted to confirm each action.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -State Active | Stop-TSSession -Force
-	
+
 			Description
 			-----------
 			logs off any connected user from Active sessions on remote computer 'comp1'.
 			By default, the caller is prompted to confirm each action. To override confirmations, the Force Switch parameter is specified.
-	
+
 		.EXAMPLE
 			Get-TSSession -ComputerName comp1 -State Active -Synchronous | Stop-TSSession -Force
-	
+
 			Description
 			-----------
 			logs off any connected user from Active sessions on remote computer 'comp1'. The Synchronous parameter tells the command to
 			wait until the session is fully disconnected and only tghen it proceeds to the next session object.
 			By default, the caller is prompted to confirm each action. To override confirmations, the Force Switch parameter is specified.
-	
+
 		.OUTPUTS
-	
+
 		.COMPONENT
 			TerminalServer
-	
+
 		.NOTES
 			Author: Shay Levy
 			Blog  : http://blogs.microsoft.co.il/blogs/ScriptFanatic/
-	
+
 		.LINK
 			http://code.msdn.microsoft.com/PSTerminalServices
-	
+
 		.LINK
 			http://code.google.com/p/cassia/
-	
+
 		.LINK
 			Get-TSSession
 			Disconnect-TSSession
 			Send-TSMessage
 		#>
-		
+
 		[CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High', DefaultParameterSetName = 'Id')]
 		Param (
-			
+
 			[Parameter()]
 			[Alias('CN', 'IPAddress')]
 			[System.String]$ComputerName = $script:server,
@@ -5943,14 +5943,14 @@ function Invoke-Stop-TSSession_ps1
 			[switch]$Synchronous,
 			[switch]$Force
 		)
-		
+
 		begin
 		{
 			try
 			{
 				$FuncName = $MyInvocation.MyCommand
 				Write-Verbose "[$funcName] Entering Begin block."
-				
+
 				if (!$ComputerName)
 				{
 					Write-Verbose "[$funcName] $ComputerName is not defined, loading global value '$script:Server'."
@@ -5960,17 +5960,17 @@ function Invoke-Stop-TSSession_ps1
 				{
 					$ComputerName = Set-TSGlobalServerName -ComputerName $ComputerName
 				}
-				
+
 				Write-Verbose "[$FuncName] Attempting remote connection to '$ComputerName'"
 				$TSManager = New-Object Cassia.TerminalServicesManager
 				$TSRemoteServer = $TSManager.GetRemoteServer($ComputerName)
 				$TSRemoteServer.Open()
-				
+
 				if (!$TSRemoteServer.IsOpen)
 				{
 					Throw 'Connection to remote server is not open. Use Connect-TSServer to connect first.'
 				}
-				
+
 				Write-Verbose "[$FuncName] Connection is open '$ComputerName'"
 				Write-Verbose "[$FuncName] Updating global Server name '$ComputerName'"
 				$null = Set-TSGlobalServerName -ComputerName $ComputerName
@@ -5980,29 +5980,29 @@ function Invoke-Stop-TSSession_ps1
 				Throw
 			}
 		}
-		
-		
-		
+
+
+
 		Process
 		{
-			
+
 			Write-Verbose "[$funcName] Entering Process block."
-			
+
 			try
 			{
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'Id')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$session = $TSRemoteServer.GetSession($Id)
 				}
-				
+
 				if ($PSCmdlet.ParameterSetName -eq 'InputObject')
 				{
 					Write-Verbose "[$FuncName] Binding to ParameterSetName '$($PSCmdlet.ParameterSetName)'"
 					$session = $InputObject
 				}
-				
+
 				if ($session -ne $null)
 				{
 					if ($Force -or $PSCmdlet.ShouldProcess($TSRemoteServer.ServerName, "Logging off session id '$($session.sessionId)'"))
@@ -6017,8 +6017,8 @@ function Invoke-Stop-TSSession_ps1
 				Throw
 			}
 		}
-		
-		
+
+
 		end
 		{
 			try
