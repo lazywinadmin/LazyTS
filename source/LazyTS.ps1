@@ -381,10 +381,10 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
         }
         CATCH{
             Write-Warning -Message "$textboxComputerName.Text - Get-TSSession Error"
-            Write-Warning -Message $Error[0].Exception.Message
-            IF ($ErrorGetTSSession) { Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSSession" -Message "Loading Error: $($Error[0].Exception.Message) " -MessageColor 'Red' }
-            IF ($ErrorLoadDGW) { Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Load-DataGridView" -Message "Loading Error: $($Error[0].Exception.Message) " -MessageColor 'Red' }
-            ELSE { Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Unknown Error" -Message "Last Error: $($Error[0].Exception.Message) " -MessageColor 'Red' }
+            Write-Warning -Message $_.Exception.Message
+            IF ($ErrorGetTSSession) { Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Get-TSSession" -Message "Loading Error: $($_.Exception.Message) " -MessageColor 'Red' }
+            IF ($ErrorLoadDGW) { Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Load-DataGridView" -Message "Loading Error: $($_.Exception.Message) " -MessageColor 'Red' }
+            ELSE { Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Unknown Error" -Message "Last Error: $($_.Exception.Message) " -MessageColor 'Red' }
         }#CATCH
     }
 
@@ -477,9 +477,9 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
         }#TRY
         CATCH{
             Write-Warning -Message "$textboxComputerName.Text - Send-TSMessage Error"
-            Write-Warning -Message "$($Error[0].Exception)"
+            Write-Warning -Message $_.Exception.Message
             Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "Sending Error" -MessageColor 'Red'
-            Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "Last Error ($error[0])" -MessageColor 'Red'
+            Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Send-TSMessage" -Message "Last Error ($($_.Exception.Message))" -MessageColor 'Red'
         }
     }
 
@@ -526,9 +526,9 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
         }#TRY
         CATCH{
             Write-Warning -Message "$textboxComputerName.Text - Disconnect-TSSession Error"
-            Write-Warning -Message "$Error[0].Exception"
+            Write-Warning -Message $_.Exception.Message
             Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Disconnect-TSSession" -Message "Disconnecting Session Failed!" -MessageColor 'red'
-            Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Disconnect-TSSession" -Message "Last Error ($error[0])" -MessageColor 'Red'
+            Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Disconnect-TSSession" -Message "Last Error ($($_.Exception.Message))" -MessageColor 'Red'
         }#CATCH
     }
 
@@ -652,9 +652,9 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
         CATCH
         {
             Write-Warning -Message "$textboxComputerName.Text - Stop-TSSession Error"
-            Write-Warning -Message "$Error[0].Exception"
+            Write-Warning -Message $_.Exception.Message
             Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSSession" -Message "Closing Session Failed!" -MessageColor 'red'
-            Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSSession" -Message "Last Error ($error[0])" -MessageColor 'Red'
+            Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Stop-TSSession" -Message "Last Error ($($_.Exception.Message))" -MessageColor 'Red'
         }#CATCH
     }
 
@@ -715,7 +715,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
         CATCH
         {
             Write-Warning -Message "$textboxComputerName.Text - Remote Desktop (Shadow/View) Error"
-            Write-Warning -Message "$Error[0].Exception"
+            Write-Warning -Message $_.Exception.Message
             Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Error while opening session" -MessageColor 'red'
         }
     }
@@ -753,7 +753,7 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
         CATCH
         {
             Write-Warning -Message "$textboxComputerName.Text - Remote Desktop (Shadow/Control) Error"
-            Write-Warning -Message "$Error[0].Exception"
+            Write-Warning -Message $_.Exception.Message
             Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Error while opening session" -MessageColor 'red'
         }
     }
