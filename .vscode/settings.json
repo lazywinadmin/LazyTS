@@ -1,4 +1,5 @@
 {
     "files.trimTrailingWhitespace": true,
-    "editor.renderWhitespace": "all"
+    "editor.renderWhitespace": "all",
+    "editor.tabSize": 4
 }
