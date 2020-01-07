@@ -695,8 +695,16 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 				{
 					$SessionID = $($datagridviewOutput.currentrow.Cells[1].value)
 					$Machine = $($datagridviewOutput.currentrow.Cells[0].value)
-					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Opening Shadow (view) session $SessionID on $($textboxComputerName.text)"
-					Start-Process -FilePath 'mstsc' -ArgumentList "/v:$($Machine) /shadow:$SessionID" #Default port is 3389
+					IF ([System.Windows.Forms.MessageBox]::Show("Do you want to prompt the user for consent ?", "Question", [System.Windows.Forms.MessageBoxButtons]::YesNo) -eq 'Yes') {
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Opening Shadow (view) session $SessionID on $($textboxComputerName.text) ..."
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Prompting user for consent ..."
+						$Arguments = "/v:$($Machine) /shadow:$SessionID"
+					} ELSE {
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Opening Shadow (view) session $SessionID on $($textboxComputerName.text) ..."
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "No consent prompt"
+						$Arguments = "/v:$($Machine) /shadow:$SessionID /noConsentPrompt"
+					}
+					Start-Process -FilePath 'mstsc' -ArgumentList $Arguments #Default port is 3389
 				}# Message Box
 			}#IF
 			IF ($datagridviewOutput.SelectedRows.Count -gt 1)
@@ -721,8 +729,16 @@ O2vc4tzh//f/DxOSH3+qrwAA#>
 				{
 					$SessionID = $($datagridviewOutput.currentrow.Cells[1].value)
 					$Machine = $($datagridviewOutput.currentrow.Cells[0].value)
-					Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Opening Shadow (control) session $SessionID on $($textboxComputerName.text)"
-					Start-Process -FilePath 'mstsc' -ArgumentList "/v:$($Machine) /shadow:$SessionID /control" #Default port is 3389
+					IF ([System.Windows.Forms.MessageBox]::Show("Do you want to prompt the user for consent ?", "Question", [System.Windows.Forms.MessageBoxButtons]::YesNo) -eq 'Yes') {
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Opening Shadow (control) session $SessionID on $($textboxComputerName.text) ..."
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Prompting user for consent ..."
+						$Arguments = "/v:$($Machine) /shadow:$SessionID /control"
+					} ELSE {
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "Opening Shadow (control) session $SessionID on $($textboxComputerName.text) ..."
+						Append-RichtextboxStatus -ComputerName $textboxComputerName.Text -Source "Remote Desktop" -Message "No consent prompt"
+						$Arguments = "/v:$($Machine) /shadow:$SessionID /noConsentPrompt /control"
+					}
+					Start-Process -FilePath 'mstsc' -ArgumentList $Arguments #Default port is 3389
 				}# Message Box
 			}#IF
 			IF ($datagridviewOutput.SelectedRows.Count -gt 1)
